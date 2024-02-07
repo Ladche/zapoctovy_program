@@ -1,3 +1,16 @@
+"""
+Láďa Vávra 
+1.ročník MFF UK 
+
+Zápočtový program 
+ZS 2023/2024
+
+Programování I 
+NPRG030
+
+část programu: potřebný modul
+"""
+
 def PresunzAdoB(_soubor_odkud, _soubor_kam,_ktery_radek):
     """přečte celý soubor, přesune zadanou řádku z souboru A -> B a přepíše soubor B tak, že v souboru A už nebude daná řádka """
     #vždy musí být odsazeno v souboru už před, dá nový řádek pro další řádku 
