@@ -1,5 +1,17 @@
-from datetime import datetime
+"""
+Láďa Vávra 
+1.ročník MFF UK 
 
+Zápočtový program 
+ZS 2023/2024
+
+Programování I 
+NPRG030
+
+část programu: potřebný modul
+"""
+
+from datetime import datetime
 
 def ZjistiDatumNaLinux(rok,mesic,den,hodina,minuta):
     """vrátí linuxový čas v daný okamžik"""
@@ -32,8 +44,8 @@ def ZjistiPocetHodinMezi(datum, datum2):
     """převede data - listy na rozdíl času v minutách """
     rok1,mesic1,den1,hodina1,minuta1 = datum
     rok2,mesic2,den2,hodina2,minuta2 = datum2
-    prvni = DatumNaLinux(rok1,mesic1,den1,hodina1,minuta1)
-    druha = DatumNaLinux(rok2,mesic2,den2,hodina2,minuta2)
+    prvni = ZjistiDatumNaLinux(rok1,mesic1,den1,hodina1,minuta1)
+    druha = ZjistiDatumNaLinux(rok2,mesic2,den2,hodina2,minuta2)
     cas = druha - prvni 
     return cas/60
 
@@ -83,7 +95,26 @@ def ZjistiTedCasVratiString():
     vratim += str(minuta)
     return vratim
 
-"""print(JakyJeTedCasVratiList())
-print("-----")
-print(JakyJeTedCasVratiString())"""
+def ZjistiInterval():
+    """kontrola délky intervalu –> nemá smysl dávat větší než 24 hodin (1440 min), menší 0. Větší než 24 mu tedy nepovolím a zamítnu 
+
+        - pokud by interval byl větší než 24 hodin, nemá moc smysl pravidelně upomínat. 
+        - maximum 24 hodin bylo zvoleno, jelikož je to největší možnost, kdy ještě zjistit 
+        že je úkol další den 
+    """
+    
+    inter = input("Zadej interval v minutách: ")
+    podminka = True
+    while podminka:
+        try:
+            #pokud zadá string, automaticky spadne
+            if int(inter)<=  1440:
+                if int(inter) > 0:
+                    return inter
+            print("Tvůj interval přesáhl 24 hodin. Zvol si nějaký, který bude smysluplný:")
+            inter = input()
+        except:
+            #pokud zadal string 
+            print("Tvůj vstup je špatně zadaný, zadej znovu smysluplnější:")
+            inter = input()  
 
