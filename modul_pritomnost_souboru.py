@@ -1,11 +1,21 @@
-import os
+"""
+Láďa Vávra 
+1.ročník MFF UK 
 
+Zápočtový program 
+ZS 2023/2024
+
+Programování I 
+NPRG030
+
+část programu: modul
+"""
+
+import os
 #cesta do složky, kde je tento soubor 
 #JeSouborPřitomnyVe aktuální složce kde je to spuštěné
 #cesta k spuštěněému souobru –> složka 
-#
-
-print("\n")
+#print("\n")
 
 def ZjistiCestuTady():
     "Zjistí a vypíše cestu k aktuální složce, v které je tato funkce spuštěna"
