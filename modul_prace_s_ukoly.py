@@ -177,7 +177,7 @@ def VypisUkoly(_soubor_s_aktualnimi_ukoly, __cislovat = False):
             for line in zdroj:
                 _cislo_radky += 1 
                 print(f"ÚKOL číslo {_cislo_radky}: " + line[15:], end = "")
-                print("počet opakování: " + (line[13]))
+                print("\tpočet opakování: " + (line[13]))
 
 def VypisUkolyKtereHori(_aktualni_cas,_soubor_s_horicimi_ukoly):
     """ z sb_s_hořícími_úkoly vypíšu úkoly, které mají do splnění méně než den """
@@ -243,7 +243,7 @@ def VypisRadku(_radka_s_past_due_ukolem):
                    
 def PresunPodleCasuZAdoB(_cas,_souborA,_souborB,_Kolik_ma_zbyt):
     """pokud je čas do plnění méně nebo kolik-má-zbýt tak přesune úkol ze souboru A do souboru B
-        pro 24 hodin -- 1_00_00 -> odpovídá 01(D)24(H)59(M)
+        pro 24 hodin -- 1_00_00 –> odpovídá 01(D)24(H)59(M)
         pro 0 hodin -- 0
        """
     #chci zavoalt přesuňZAdoB na potřebné řádky 

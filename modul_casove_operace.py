@@ -12,6 +12,9 @@ NPRG030
 """
 
 from datetime import datetime
+import threading #pro více vláken
+import queue #pro předávání informací mezi vlákny
+import time
 
 def ZjistiDatumNaLinux(rok,mesic,den,hodina,minuta):
     """vrátí linuxový čas v daný okamžik"""
@@ -95,8 +98,9 @@ def ZjistiTedCasVratiString():
     vratim += str(minuta)
     return vratim
 
-def ZjistiInterval():
-    """kontrola délky intervalu –> nemá smysl dávat větší než 24 hodin (1440 min), menší 0. Větší než 24 mu tedy nepovolím a zamítnu 
+def ZjistiInterval(maximum = 1440, minimum = 0):
+    """kontrola délky intervalu –> nemá smysl dávat větší než 24 hodin (1440 min), menší 0. Automaticky větší než 24 mu tedy nepovolím a zamítnu 
+        lze si nastavit vlastní hodnoty, pokud by bylo třeba 
 
         - pokud by interval byl větší než 24 hodin, nemá moc smysl pravidelně upomínat. 
         - maximum 24 hodin bylo zvoleno, jelikož je to největší možnost, kdy ještě zjistit 
@@ -108,8 +112,8 @@ def ZjistiInterval():
     while podminka:
         try:
             #pokud zadá string, automaticky spadne
-            if int(inter)<=  1440:
-                if int(inter) > 0:
+            if int(inter)<=  maximum:
+                if int(inter) > minimum:
                     return inter
             print("Tvůj interval přesáhl 24 hodin. Zvol si nějaký, který bude smysluplný:")
             inter = input()
@@ -117,4 +121,46 @@ def ZjistiInterval():
             #pokud zadal string 
             print("Tvůj vstup je špatně zadaný, zadej znovu smysluplnější:")
             inter = input()  
+
+def ZjistiVstup(timeout_ = 5,text_tisk = ""):
+    f"""Čeká dobu *timeout* na vstup, automaticky {timeout_} sekund, jinak vrátí False a prázdný string.
+    Pokud se zadá vstup, vrátí daný vstup a True
+    """
+    fronta = queue.Queue()
+    def cteni_vstupu_(fronta):
+        try:
+            vstup = input(text_tisk)
+            fronta.put((True, vstup))
+        except:
+            fronta.put((False, ""))
+    vlakno_vstup = threading.Thread(target=cteni_vstupu_, args=(fronta,))#turple pro správnou interpretaci - proto (fronta,)
+    vlakno_vstup.start()
+
+    vlakno_vstup.join(timeout=timeout_)
+
+    if vlakno_vstup.is_alive():
+        print("Čas vypršel, vstup nebyl zadán.")
+        return False, ""
+    else:
+        return fronta.get()
+
+#zrejmě nepoužívaný 
+def ZjistiJestliNadeselCas(_kdy_mam_skoncit_):
+    """hlavní vlákno kontrolující čas, jestli už není kdy mám skončit
+    pokud není, vrátím False, pokud je, vrátím True
+    - zjišťuji pomocí nezávislého vlákna"""
+    
+    def _Nadesel_cas(_kdy_mam_skoncit_):
+        print(f"čas je {time.time()} a mám skončit za {_kdy_mam_skoncit_ - time.time()}")
+        while time.time() >= _kdy_mam_skoncit_:
+            pass
+        return True 
+    vlakno_nadesel = threading.Thread(target=_Nadesel_cas, args=(_kdy_mam_skoncit_,))
+    vlakno_nadesel.start()
+    if vlakno_nadesel.is_alive():
+        print(f"Nepřišel ještě ten čas")
+        return False
+    else:
+        return True 
+
 

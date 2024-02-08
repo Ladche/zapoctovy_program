@@ -57,15 +57,15 @@ def NastavSoubory():
                 with open(cesta_k_akt, "r") as f:
                     s = f.readline
         except:
-            print(" soubor s aktuálními úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
+            print(" \tsoubor s aktuálními úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
             try:
                 cesta_k_akt = ZjistiCestuTady() + "/" + aktualni
                 #print(f"cesta je {cesta_k_akt}")
                 
                 open(cesta_k_akt, "x")
-                print("     vytvořen soubor s aktuálními úkoly\n")
+                print("     \tvytvořen soubor s aktuálními úkoly\n")
             except:
-                print("chyba - zkuste restartovat soubor")
+                print("CHYBA - zkuste restartovat soubor")
                 #vyjímka, chyba, potřeba restartovat 
 
     for _ in range(2):
@@ -79,15 +79,15 @@ def NastavSoubory():
                 with open(cesta_k_akt, "r") as f:
                     s = f.readline
         except:
-            print(" soubor s hořícími úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
+            print(" \tsoubor s hořícími úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
             try:
                 cesta_k_akt = ZjistiCestuTady() + "/" + horici
                 #print(f"cesta je {cesta_k_akt}")
                 
                 open(cesta_k_akt, "x")
-                print("     vytvořen soubor s hořícími úkoly\n")
+                print("     \tvytvořen soubor s hořícími úkoly\n")
             except:
-                print("chyba - zkuste restartovat soubor")
+                print("CHYBA - zkuste restartovat soubor")
 
     for _ in range(2):
         #při prvním načtení zjistí přítomnost a při druhém načtení založí 
@@ -100,15 +100,15 @@ def NastavSoubory():
                 with open(cesta_k_akt, "r") as f:
                     s = f.readline
         except:
-            print(" soubor s post due úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
+            print(" \tsoubor s post due úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
             try:
                 cesta_k_akt = ZjistiCestuTady() + "/" + post_due
                 #print(f"cesta je {cesta_k_akt}")
                 
                 open(cesta_k_akt, "x")
-                print("     vytvořen soubor s post due úkoly\n")
+                print("     \tvytvořen soubor s post due úkoly\n")
             except:
-                print("chyba - zkuste restartovat soubor")
+                print("CHYBA - zkuste restartovat soubor")
     for _ in range(2):
         #při prvním načtení zjistí přítomnost a při druhém načtení založí 
         #zjistil jsem při testování - jen jedno spuštění nestačí, hodí chybu, ovšem při druhém spuštění již funguje bezchybně 
@@ -120,18 +120,19 @@ def NastavSoubory():
                 with open(cesta_k_akt, "r") as f:
                     s = f.readline
         except:
-            print(" soubor s hotovými úkoly nebyl přítomný, zahajuji jeho tvorbu ")
+            print(" \tsoubor s hotovými úkoly nebyl přítomný, zahajuji jeho tvorbu ")
             try:
                 cesta_k_akt = ZjistiCestuTady() + "/" + hotove
                 #print(f"cesta je {cesta_k_akt}")
                 
                 open(cesta_k_akt, "x")
-                print("     vytvořen soubor s hotovými úkoly\n")
+                print("     \tvytvořen soubor s hotovými úkoly\n")
             except:
-                print("chyba - zkuste restartovat soubor")
+                print("CHYBA - zkuste restartovat soubor")
                 #vyjímka, chyba, potřeba restartovat 
 
-    print("konec úseku nastavování potřebných souborů ")
+    print("\nkonec úseku nastavování potřebných souborů ")
+    print("-   "*20)
 
 def KontrolaPritomnostiModulu():
     """zkontroluje přítomnost potřebných modulů, které program potřebuje pro svůj běh """
