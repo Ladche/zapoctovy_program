@@ -10,6 +10,9 @@ NPRG030
 
 část programu: potřebný modul
 """
+import random 
+#pro náhodný výběr motivujícíc hlášky během výstrah
+
 
 def PresunzAdoB(_soubor_odkud, _soubor_kam,_ktery_radek):
     """přečte celý soubor, přesune zadanou řádku z souboru A -> B a přepíše soubor B tak, že v souboru A už nebude daná řádka """
@@ -124,21 +127,33 @@ def Vystraha(_pocet_opakovani, _zbyvajici_cas__):
     list_motiv2 = ["Už se ti blíží termín, ale ještě máš šanci :D"]
     list_motiv3 = ["S kazni prichazi svoboda. Posledni sance to stihnout bro "]
     if _pocet_opakovani == 0:
-        #první výstraha, ještě žádná 
+        #první výstraha, ještě žádná nebyla předtím 
         print(f"blíží se ti termín! máš ho za {_zbyvajici_cas__}, toto je tvá první výstraha")
         return
     #chci aby mi skončila funkce, když nastane první možnost 
     if _pocet_opakovani == 1: 
-        print(f"zbývající čas do zkoušky: " + str(_zbyvajici_cas__))
-        print(f"TADY DOPSAT MOTIVUJICI HLASKU NA PRVNI OPAKOVANÍ, jedná se o tvoji druhou výstrahu ") 
+        #druhá výstraha
+        index_1 = random.randrange(0,len(list_motiv1))
+        print(list_motiv1[index_1])
+        print(f"zbývá ti ještě: " + str(_zbyvajici_cas__))
+        ###print(f"TADY DOPSAT MOTIVUJICI HLASKU NA PRVNI OPAKOVANÍ, jedná se o tvoji druhou výstrahu ") 
         return
     if _pocet_opakovani == 2: 
-        print(f"TADY DOPSAT MOTIVUJICI HLASKU NA DRUHEEE OPAKOVANI, jedná se o tvoji třetí výstrahu ") 
-        print(f"zbývající čas do zkoušky: " + str(_zbyvajici_cas__))
+        #druhá výstraha - vytisknu náhodnou povzbuzující hlášku 
+        ##print(f"TADY DOPSAT MOTIVUJICI HLASKU NA DRUHEEE OPAKOVANI, jedná se o tvoji třetí výstrahu ")
+        index_2 = random.randrange(0,len(list_motiv2))
+        print(list_motiv2[index_2])
+        print(f"zbývá ti ještě: " + str(_zbyvajici_cas__))
         return 
     if _pocet_opakovani == 3: 
-        print(f"KAMO UZ TO MAS FAKT BLIZKO DELEJ NECO S TIM HELE UZ, už máš více než 3 výstrahy ") 
-        print(f"zbývající čas do zkoušky: " + str(_zbyvajici_cas__))
+        ##print(f"KAMO UZ TO MAS FAKT BLIZKO DELEJ NECO S TIM HELE UZ, už máš více než 3 výstrahy ")
+        index_3 = random.randrange(0,len(list_motiv3))
+        print(list_motiv3[index_3])
+        print(f"zbývá ti ještě: " + str(_zbyvajici_cas__))
+        return 
+    if _pocet_opakovani >3:
+        #doporučení psychologa 
+        print(f"Již jsi nesplnil úkol více než 3x. Zkus se prosím s kvalifikovaným psychologem poradit o chronické prokrastinaci.")
         return 
 
 def VypisUkoly(_soubor_s_aktualnimi_ukoly, __cislovat = False):
@@ -163,7 +178,6 @@ def VypisUkoly(_soubor_s_aktualnimi_ukoly, __cislovat = False):
                 _cislo_radky += 1 
                 print(f"ÚKOL číslo {_cislo_radky}: " + line[15:], end = "")
                 print("počet opakování: " + (line[13]))
-
 
 def VypisUkolyKtereHori(_aktualni_cas,_soubor_s_horicimi_ukoly):
     """ z sb_s_hořícími_úkoly vypíšu úkoly, které mají do splnění méně než den """
@@ -211,11 +225,11 @@ def VypisUkolyKtereHori(_aktualni_cas,_soubor_s_horicimi_ukoly):
 
 def VypisRadku(_radka_s_past_due_ukolem):
     #chci speciálně vypsast úkoly, které už jsou po termínu a já mu je chci říct 
-    print("\n\nfunkce VypisRadku")
+    #print("\n\nfunkce VypisRadku")
     _do_kdy_se_mel_splnit_cele_datum = _radka_s_past_due_ukolem[:12]
-    print(f"pro řádku {_radka_s_past_due_ukolem}\n bylo datum splnění {_do_kdy_se_mel_splnit_cele_datum}")
-    print(f"KONTORLA : ŘÁDKA JE |{_radka_s_past_due_ukolem}.")
-    print(f"KONTROLNÍ PRINT. délka řádky |{len(_radka_s_past_due_ukolem)}")
+    ##print(f"pro řádku {_radka_s_past_due_ukolem}\n bylo datum splnění {_do_kdy_se_mel_splnit_cele_datum}")
+    ##print(f"KONTORLA : ŘÁDKA JE |{_radka_s_past_due_ukolem}.")
+    ##print(f"KONTROLNÍ PRINT. délka řádky |{len(_radka_s_past_due_ukolem)}")
     _jmeno_ukolu_past_due = _radka_s_past_due_ukolem[15:]
     _rok_past_due = _do_kdy_se_mel_splnit_cele_datum[0:4]
     _mesic_past_due = _do_kdy_se_mel_splnit_cele_datum[4:6]
@@ -225,16 +239,11 @@ def VypisRadku(_radka_s_past_due_ukolem):
     _pocet_vystrah_due = _radka_s_past_due_ukolem[13]
     print(f"úkol {_jmeno_ukolu_past_due} měl být splněn {_rok_past_due}/{_mesic_past_due}/{_den_past_due} \
           v čase {_hodina_past_due}:{_minuta_past_due}. Byl jsi na něj upozorněn již {_pocet_vystrah_due}")
-
-
-
-    
     #jméno úkolu, datum kdy mělo být splněno,počet jeho opakování, 
-    
-                    
+                   
 def PresunPodleCasuZAdoB(_cas,_souborA,_souborB,_Kolik_ma_zbyt):
     """pokud je čas do plnění méně nebo kolik-má-zbýt tak přesune úkol ze souboru A do souboru B
-        pro 24 hodin -- 1_00_00 –> odpovídá 01(D)24(H)59(M)
+        pro 24 hodin -- 1_00_00 -> odpovídá 01(D)24(H)59(M)
         pro 0 hodin -- 0
        """
     #chci zavoalt přesuňZAdoB na potřebné řádky 
