@@ -50,9 +50,9 @@ print("-"*50, end = "\n\n")
 #timeout = ZjistiInterval((10/60))#heuristicky si myslím, že 10 sekundový interval na to, abych se rozhodl jestli chci 
                                 #dělat nějakou akci je dostačující
 timeout = 20
-interval = 3 #ODEBRAT "!!!!!" nastaveno na 3 sekundy
+interval = 10 #ODEBRAT "!!!!!" nastaveno na 3 sekundy
 cas_pocatecni = time.time()
-cas_zopakovat = cas_pocatecni + interval 
+cas_zopakovat = cas_pocatecni + 1
 while True:
     #cílem aby program běžel nonstop v pozadí 
     
@@ -64,9 +64,7 @@ while True:
 
     print(f"Nyní budu vyčkávat, připomenutí ti přijde znovu za {interval/60} minut, tedy v {cas_zopakovat}")
 """
-    while time.time() < cas_zopakovat:
-        #print(f"stále čekám {time.time()} < {cas_zopakovat}")
-        time.sleep(1)
+    #přesunutí čekání na konec
     aktualni_cas = time.time()
     cas_zopakovat = aktualni_cas + interval
     #čas nadešel, jdeme na to:
@@ -98,15 +96,17 @@ while True:
     #timeout na rozhodnutí 
     print("Chceš provádět nějaké akce? \nAno ... A\nNe... N (či cokoliv jiného)\n")
     pravdivost, zapoceti = ZjistiVstup()
+    print(f"{zapoceti} - vstup")
+    print(f"\nvstupní parametry:\npravdivost {pravdivost}\nzapoceti {zapoceti}\ncčas zopakovat {cas_zopakovat}\n aktuální {time.time()}, rozdíl je {cas_zopakovat - time.time()}\n")
     while pravdivost:
         ##zapoceti = input("")
         if zapoceti == "A":
             informacni_text = "-----------\nmožnosti, jaké akce můžeš zvolit\n  formát: [jméno akce]......[co napsat pro tíženou akci]\
-                \n        Odškrtnout(splnit) úkol ...... O, S\n        Přidat úkol ...... P\n        Zobrazit hotové úkoly ...... Z \n---------\
-                \n    pro ukončení napiš: K \n------------"
+                \n\tOdškrtnout(splnit) úkol ...... O, S\n\tPřidat úkol ...... P\n\tZobrazit hotové úkoly ...... Z \n---------\
+                \n\tpro ukončení napiš: K \n------------"
             text_input = "Napiš mi tíženou akci:\n "
             print(informacni_text)
-            pravdivost, inp = ZjistiVstup()
+            inp = input()
             #nastavení timeoutu, ať program nečeká celou dobu na uživatelský input, skončí když mu uživatel nic nedá 
             while inp == "P"  or inp == "S" or inp == "O" or inp == "Z":#jednodušší, než speciální klávesa pro ukončení 
                 if inp == "P":
@@ -204,11 +204,9 @@ while True:
                     print("%%%%%%")
                     print("\n\n"+ informacni_text)
                     inp = input(text_input)
-    print("Konec akcí ")
+        else:
+            pass
+    pravdivost = True
+    print("\tKonec akcí \n")
+    time.sleep(max(0, cas_zopakovat - time.time())) #změna, pojistka ať nečekám 
     
-
-
-    print("aa")
-     
-
-

@@ -134,6 +134,7 @@ def Vystraha(_pocet_opakovani, _zbyvajici_cas__):
     if _pocet_opakovani == 1: 
         #druhá výstraha
         index_1 = random.randrange(0,len(list_motiv1))
+        print()
         print(list_motiv1[index_1])
         print(f"zbývá ti ještě: " + str(_zbyvajici_cas__))
         ###print(f"TADY DOPSAT MOTIVUJICI HLASKU NA PRVNI OPAKOVANÍ, jedná se o tvoji druhou výstrahu ") 
@@ -142,17 +143,20 @@ def Vystraha(_pocet_opakovani, _zbyvajici_cas__):
         #druhá výstraha - vytisknu náhodnou povzbuzující hlášku 
         ##print(f"TADY DOPSAT MOTIVUJICI HLASKU NA DRUHEEE OPAKOVANI, jedná se o tvoji třetí výstrahu ")
         index_2 = random.randrange(0,len(list_motiv2))
+        print()
         print(list_motiv2[index_2])
         print(f"zbývá ti ještě: " + str(_zbyvajici_cas__))
         return 
     if _pocet_opakovani == 3: 
         ##print(f"KAMO UZ TO MAS FAKT BLIZKO DELEJ NECO S TIM HELE UZ, už máš více než 3 výstrahy ")
         index_3 = random.randrange(0,len(list_motiv3))
+        print()
         print(list_motiv3[index_3])
         print(f"zbývá ti ještě: " + str(_zbyvajici_cas__))
         return 
     if _pocet_opakovani >3:
         #doporučení psychologa 
+        print()
         print(f"Již jsi nesplnil úkol více než 3x. Zkus se prosím s kvalifikovaným psychologem poradit o chronické prokrastinaci.")
         return 
 
@@ -170,7 +174,7 @@ def VypisUkoly(_soubor_s_aktualnimi_ukoly, __cislovat = False):
         with open(_soubor_s_aktualnimi_ukoly, 'r') as zdroj:
             for line in zdroj:
                 print(f"ÚKOL: " + line[15:], end = "")
-                print("počet opakování: " + (line[13]))
+                print("\tpočet opakování: " + (line[13]))
     if __cislovat == True:
         _cislo_radky = 0
         with open(_soubor_s_aktualnimi_ukoly, 'r') as zdroj:
@@ -187,14 +191,14 @@ def VypisUkolyKtereHori(_aktualni_cas,_soubor_s_horicimi_ukoly):
     with open(_soubor_s_horicimi_ukoly, 'r') as zdroj:
         #print("přivolána funkce vypisukoly které hoří ")
         for line in zdroj: 
-            print(f"\n %%%% \n aktuální řádka: {line}")
+            ##print(f"\n %%%% \n aktuální řádka: {line}")
             pocet_vystrah = int(line[13]) 
 
             #zjistím datum úkolu a jeslti je menší než 
             termin_ukolu = int(line[0:10])
             #print(f"čas a datum je {_aktualni_cas}")
             delta_casu = termin_ukolu - _aktualni_cas
-            print(f"\n ----- \n výpočet delty času: \n delta času .. {delta_casu} = {termin_ukolu} - {_aktualni_cas}\n termín úkolu je {termin_ukolu} \n aktuální čas je {_aktualni_cas}")
+            ##print(f"\n ----- \n výpočet delty času: \n delta času .. {delta_casu} = {termin_ukolu} - {_aktualni_cas}\n termín úkolu je {termin_ukolu} \n aktuální čas je {_aktualni_cas}")
             #zjistím zbývající čas do splnění úkolu,
             #jestli méně jak 1 00 00 tak dělám akci
             if delta_casu <= 1_00_00:
@@ -203,8 +207,10 @@ def VypisUkolyKtereHori(_aktualni_cas,_soubor_s_horicimi_ukoly):
                     #chci zjistit počet výstrah / opakování 
                     #chci zvětšit počet opakování daného úkolu o 1
                     #než přepisovat celý soubor, tak asi bude jednodušší to dát od dalšího souboru 
+                    print(f"\n Hořící úkol: {line[15:]}")
+                        #změna pořadí, bylo to opačně
                     Vystraha(pocet_vystrah, delta_casu)
-                    print(f"\n hořící úkol: {line[15:]}")
+                    
                     #print("if podmínka")
                     aktualizovana_vystraha = pocet_vystrah + 1
                     aktualizovana_line = line[:13] + str(aktualizovana_vystraha) + line[14:]

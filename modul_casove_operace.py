@@ -134,14 +134,18 @@ def ZjistiVstup(timeout_ = 5,text_tisk = ""):
         except:
             fronta.put((False, ""))
     vlakno_vstup = threading.Thread(target=cteni_vstupu_, args=(fronta,))#turple pro správnou interpretaci - proto (fronta,)
+    vlakno_vstup.daemon = True
     vlakno_vstup.start()
 
     vlakno_vstup.join(timeout=timeout_)
 
     if vlakno_vstup.is_alive():
-        print("Čas vypršel, vstup nebyl zadán.")
+        print("\t\tČas vypršel, vstup nebyl zadán.")
+        
         return False, ""
+    
     else:
+        
         return fronta.get()
 
 #zrejmě nepoužívaný 
