@@ -49,7 +49,7 @@ print("-"*50, end = "\n\n")
 #interval = int(input("Napiš jak často chceš aby se ti opakovalo vypisování a upozorňování na úkoly"))
 
 
-#varianta 2 - můžu použít funkci ZjistiInterval()
+"""#varianta 2 - můžu použít funkci ZjistiInterval()
 print("Napiš jak často (v minutách) chceš aby se ti opakovalo vypisování a upozorňování na úkoly")
 interval = int(ZjistiInterval()) *60
 print("Napiš jak kolik času v sekundách chceš, aby program čekal na tvoji odpověď")
@@ -57,11 +57,11 @@ timeout = int(ZjistiInterval((30)))#heuristicky si myslím, že 10 sekundový in
                                 #dělat nějakou akci je dostačující
 print("Napiš kolik sekund chceš vidět úkoly, co jsi dělal - po ukončení tvojich (případných) akcí. Minimálně je 1s a maximum je hodina")
 cekaci_doba_terminalu = int(ZjistiInterval(3600,1))
+"""
 
-
-"""timeout = 20
-interval = 10 #ODEBRAT "!!!!!" nastaveno na 3 sekundy
-cekaci_doba_terminalu = 3"""
+timeout = 20
+interval = 20 #ODEBRAT "!!!!!" nastaveno na 3 sekundy
+cekaci_doba_terminalu = 20
 while True:
     #cílem aby program běžel nonstop v pozadí 
     
@@ -108,7 +108,7 @@ while True:
     #ze začátku zjistí jestli něco chce dělat, potom už nekontroluji - předpokládám, že uživatel když chce něco dělat, nepřestane odpovídat
     informacni_text = "-----------\nmožnosti, jaké akce můžeš zvolit\n  formát: [jméno akce]......[co napsat pro tíženou akci]\
                 \n\tOdškrtnout(splnit) úkol ...... O, S\n\tPřidat úkol ...... P\n\tZobrazit hotové úkoly ...... Z \n---------\
-                \n\tpro ukončení napiš: K \n------------"
+                \n\tpro ukončení napiš: cokoliv jiného\n------------"
     text_input = "Napiš mi tíženou akci:\n "
     ##print(f"{zapoceti} - vstup")
     ##print(f"\nvstupní parametry:\npravdivost {pravdivost}\nzapoceti {zapoceti}\ncčas zopakovat {cas_zopakovat}\n aktuální {time.time()}, rozdíl je {cas_zopakovat - time.time()}\n")
@@ -143,7 +143,7 @@ while True:
                         #hořící úkoly 
                         #zjistit jaký řádek 
                         print()
-                        z1 = VypisUkoly(horici,True)
+                        VypisUkoly(horici,True)
                         try:
                             radka_kterou_odskrtnout_H = input(f"zadej číslo úkolu, který si přeješ odškrtnout ")
                             cislo_odskrtavane_radky_H = int(radka_kterou_odskrtnout_H)
@@ -164,7 +164,7 @@ while True:
                     if v_jakem_souboru == "A":
                         # aktuální úkoly
                         print()
-                        z3 = VypisUkoly(horici,True)
+                        VypisUkoly(aktualni,True)
                         try:
                             radka_kterou_odskrtnout_A = input(f"zadej číslo úkolu, který si přeješ odškrtnout ")
                             cislo_odskrtavane_radky_A = int(radka_kterou_odskrtnout_A)
@@ -186,7 +186,7 @@ while True:
                     if v_jakem_souboru == "P":
                         #past due úkoly 
                         print()
-                        z5 = VypisUkoly(horici,True)
+                        VypisUkoly(past_due,True)
                         try:
                             radka_kterou_odskrtnout_P = input(f"zadej číslo úkolu, který si přeješ odškrtnout ")
                             cislo_odskrtavane_radky_P = int(radka_kterou_odskrtnout_P)
