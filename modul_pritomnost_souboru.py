@@ -8,7 +8,7 @@ ZS 2023/2024
 Programování I 
 NPRG030
 
-část programu: modul
+část programu: modul kontroly přítomnosti soouborů 
 """
 
 import os
@@ -41,6 +41,8 @@ def NastavSoubory():
         - soubor s hořícími úkoly: horici.txt
         - soubor s post_due úkoly: post_due.txt 
         """
+    print("-   "*20)
+    print("začátek úseku nastavování souborů ")
     aktualni = "aktualni.txt"
     horici = "horici.txt"
     post_due = "post_due.txt"

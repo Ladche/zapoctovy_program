@@ -8,13 +8,15 @@ ZS 2023/2024
 Programování I 
 NPRG030
 
-část programu: potřebný modul
+část programu: potřebný modul časových operací 
 """
 
 from datetime import datetime
-import threading #pro více vláken
+#import threading #pro více vláken
 import queue #pro předávání informací mezi vlákny
 import time
+import subprocess
+import threading
 
 def ZjistiDatumNaLinux(rok,mesic,den,hodina,minuta):
     """vrátí linuxový čas v daný okamžik"""
@@ -107,7 +109,7 @@ def ZjistiInterval(maximum = 1440, minimum = 0):
         že je úkol další den 
     """
     
-    inter = input("Zadej interval v minutách: ")
+    inter = input("Zadej interval: ")
     podminka = True
     while podminka:
         try:
@@ -115,7 +117,7 @@ def ZjistiInterval(maximum = 1440, minimum = 0):
             if int(inter)<=  maximum:
                 if int(inter) > minimum:
                     return inter
-            print("Tvůj interval přesáhl 24 hodin. Zvol si nějaký, který bude smysluplný:")
+            print(f"Tvůj interval nedává s danými požadavky smysl. Vyber si nějaký v rozmezí {minimum} <-> {maximum}\nZvol si nějaký, který bude smysluplný:")
             inter = input()
         except:
             #pokud zadal string 
@@ -124,8 +126,8 @@ def ZjistiInterval(maximum = 1440, minimum = 0):
 
 def ZjistiVstup(timeout_ = 5,text_tisk = ""):
     f"""Čeká dobu *timeout* na vstup, automaticky {timeout_} sekund, jinak vrátí False a prázdný string.
-    Pokud se zadá vstup, vrátí daný vstup a True
-    """
+    Pokud se zadá vstup, vrátí daný vstup a True"""
+    
     fronta = queue.Queue()
     def cteni_vstupu_(fronta):
         try:
@@ -148,23 +150,41 @@ def ZjistiVstup(timeout_ = 5,text_tisk = ""):
         
         return fronta.get()
 
-#zrejmě nepoužívaný 
-def ZjistiJestliNadeselCas(_kdy_mam_skoncit_):
-    """hlavní vlákno kontrolující čas, jestli už není kdy mám skončit
-    pokud není, vrátím False, pokud je, vrátím True
-    - zjišťuji pomocí nezávislého vlákna"""
+"""def ZjistiVstup(timeout_=5, text_tisk=""):
+    #Čeká dobu *timeout* na vstup, automaticky {timeout_} sekund, jinak vrátí False a prázdný string.
+    #Pokud se zadá vstup, vrátí daný vstup a True
     
-    def _Nadesel_cas(_kdy_mam_skoncit_):
-        print(f"čas je {time.time()} a mám skončit za {_kdy_mam_skoncit_ - time.time()}")
-        while time.time() >= _kdy_mam_skoncit_:
-            pass
-        return True 
-    vlakno_nadesel = threading.Thread(target=_Nadesel_cas, args=(_kdy_mam_skoncit_,))
-    vlakno_nadesel.start()
-    if vlakno_nadesel.is_alive():
-        print(f"Nepřišel ještě ten čas")
-        return False
+    running = [True]  #proti hromadění vstupů, jak se předtím stávalo již u druhé iterace 
+
+    def cteni_vstupu_(fronta, running):
+        while running[0]:
+            try:
+                vstup = input(text_tisk)
+                fronta.put((True, vstup))
+                break  
+            except:
+                fronta.put((False, ""))
+                break
+
+    fronta = queue.Queue()
+    vlakno_vstup = threading.Thread(target=cteni_vstupu_, args=(fronta, running))
+    vlakno_vstup.daemon = True
+    vlakno_vstup.start()
+
+    vlakno_vstup.join(timeout=timeout_)
+
+    if vlakno_vstup.is_alive():
+        print("\t\tČas vypršel, vstup nebyl zadán.")
+        running[0] = False  # Signalizujeme vláknu, aby se ukončilo
+        return False, ""
     else:
-        return True 
+        return fronta.get()"""
+
+def ZjistiJestliReaguje(__doba_cekani_na_uzivatelsky_vstup___):
+    """Zadej dobu, jak dlouho má čekat, než uživatel napíše vstup"""
+    x = subprocess.call(f'read -t {__doba_cekani_na_uzivatelsky_vstup___}', shell=True)
+    return not x
+
+
 
 

@@ -8,7 +8,7 @@ ZS 2023/2024
 Programování I 
 NPRG030
 
-část programu: potřebný modul
+část programu: potřebný modul práce s úkoly 
 """
 import random 
 #pro náhodný výběr motivujícíc hlášky během výstrah
@@ -85,7 +85,7 @@ def Atributy(__typy_atributu_na_kontrolu,__nazvy_atributu = ""):
     například typy_atributu_na_kontrolu = [int,str]"""
     #netiskne atribut, pokud je atribut "NEPSAT" a dá 0 
     pocet = len(__typy_atributu_na_kontrolu)
-    print(f"zadej mi následujících {pocet-1} atributů na každý řádek zvlášť v pořadí: {__nazvy_atributu}")
+    print(f"zadej mi následujících {pocet-1} atributů na každý řádek zvlášť: ")     ##v pořadí: {__nazvy_atributu}") #nadbytečné 
     __atributy = []
     for i in range(pocet):
         if __nazvy_atributu[i] == "NEPSAT":
@@ -173,15 +173,15 @@ def VypisUkoly(_soubor_s_aktualnimi_ukoly, __cislovat = False):
     if __cislovat == False:
         with open(_soubor_s_aktualnimi_ukoly, 'r') as zdroj:
             for line in zdroj:
-                print(f"ÚKOL: " + line[15:], end = "")
-                print("\tpočet opakování: " + (line[13]))
+                print(f"ÚKOL: " + line[15:],end = "")
+                print("\n\tpočet opakování: " + (line[13]))
     if __cislovat == True:
         _cislo_radky = 0
         with open(_soubor_s_aktualnimi_ukoly, 'r') as zdroj:
             for line in zdroj:
                 _cislo_radky += 1 
-                print(f"ÚKOL číslo {_cislo_radky}: " + line[15:], end = "")
-                print("\tpočet opakování: " + (line[13]))
+                print(f"ÚKOL číslo {_cislo_radky}: " + line[15:],end = "")
+                print("\n\tpočet opakování: " + (line[13]))
 
 def VypisUkolyKtereHori(_aktualni_cas,_soubor_s_horicimi_ukoly):
     """ z sb_s_hořícími_úkoly vypíšu úkoly, které mají do splnění méně než den """
@@ -249,7 +249,7 @@ def VypisRadku(_radka_s_past_due_ukolem):
                    
 def PresunPodleCasuZAdoB(_cas,_souborA,_souborB,_Kolik_ma_zbyt):
     """pokud je čas do plnění méně nebo kolik-má-zbýt tak přesune úkol ze souboru A do souboru B
-        pro 24 hodin -- 1_00_00 –> odpovídá 01(D)24(H)59(M)
+        pro 24 hodin -- 1_00_00 -> odpovídá 01(D)24(H)59(M)
         pro 0 hodin -- 0
        """
     #chci zavoalt přesuňZAdoB na potřebné řádky 
@@ -312,7 +312,7 @@ while pokracovat == True:
     #ukolykterepastdue(soubor_s_horicimi_ukoly)
     #chces_odstrknout_horici_ukoly(soubor_s_horicimi_ukoly,soubor_s_hotovymi_ukoly, ??)
     #chces si odskrtnout nehorici ukoly( soubor_s_aktualnimi ukoly, soubor s hotovymi ukoly, )
-    #chces pridat ukol() –> hotovy modul 
+    #chces pridat ukol() -> hotovy modul 
     # chces si zobrazit hotove ukoly(soubr s hotovymi ukoly )
     #pravidelne ukoly - pridani pravidelnych ukolu ??? 
     #NE ! rozvrh hodin??? - pravidelne ukoly ktere musim pridat a sty splnit - takze zase nějaké opakování 

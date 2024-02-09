@@ -17,6 +17,7 @@ from modul_casove_operace import *
 from modul_prace_s_ukoly import *
 from modul_pritomnost_souboru import *
 
+
 #------------------–––––––––––––––––––––––––––––––––––––-
 
 #nastavení programu - vytvoření potřebných souborů, pokud již nejsou přítomny v aktuální složce 
@@ -41,18 +42,26 @@ print("-"*50, end = "\n\n")
 #konec nastavení 
 
 #začátek main() smyčky
+
+#varianta 1
 #interval = int(input("Zvol si pevný inverval v minutách, jak často chceš být upozorňován(a)")*60)
+#cekaci_doba_terminalu = int(input("Napiš mi kolik sekund chceš, aby se ti po konci kola dané inputy zobrazovaly - v sekundách!"))
+#interval = int(input("Napiš jak často chceš aby se ti opakovalo vypisování a upozorňování na úkoly"))
 
-#stará se o to funkce ZjistiInterval()
-#interval = ZjistiInterval()
 
-
-#timeout = ZjistiInterval((10/60))#heuristicky si myslím, že 10 sekundový interval na to, abych se rozhodl jestli chci 
+#varianta 2 - můžu použít funkci ZjistiInterval()
+print("Napiš jak často (v minutách) chceš aby se ti opakovalo vypisování a upozorňování na úkoly")
+interval = int(ZjistiInterval()) *60
+print("Napiš jak kolik času v sekundách chceš, aby program čekal na tvoji odpověď")
+timeout = int(ZjistiInterval((30)))#heuristicky si myslím, že 10 sekundový interval na to, abych se rozhodl jestli chci 
                                 #dělat nějakou akci je dostačující
-timeout = 20
+print("Napiš kolik sekund chceš vidět úkoly, co jsi dělal - po ukončení tvojich (případných) akcí. Minimálně je 1s a maximum je hodina")
+cekaci_doba_terminalu = int(ZjistiInterval(3600,1))
+
+
+"""timeout = 20
 interval = 10 #ODEBRAT "!!!!!" nastaveno na 3 sekundy
-cas_pocatecni = time.time()
-cas_zopakovat = cas_pocatecni + 1
+cekaci_doba_terminalu = 3"""
 while True:
     #cílem aby program běžel nonstop v pozadí 
     
@@ -90,21 +99,23 @@ while True:
     
 
     typy_atributu_pridavaneho_ukolu = [int,int,str]
-    jmena_atributu_pridavaneho_ukolu = ["datum ve formátu RRRR.MM.DD.HH.MM kde R.. roky (například 2024)| M.. měsíc (například leden..01)|  D.. datum dne v měsíci (druhý -> 02)| H.. hodina (formát 24 hodin, 01-24)| M .. minuta (0 až 60) ","NEPSAT","Jméno úkolu: "]
+    jmena_atributu_pridavaneho_ukolu = ["datum ve formátu *RRRR.MM.DD.HH.MM* kde \n\tR.. roky (například 2024)|\n\tM.. měsíc (například leden..01)|\n\tD.. datum dne v měsíci (druhý -> 02)|\n\tH.. hodina (formát 24 hodin, 01-24)|\n\tM .. minuta (0 až 60) ","NEPSAT","Jméno úkolu: "]
 
     #otázka, jestli chce něco dělat za akce: 
     #timeout na rozhodnutí 
-    print("Chceš provádět nějaké akce? \nAno ... A\nNe... N (či cokoliv jiného)\n")
-    pravdivost, zapoceti = ZjistiVstup()
-    print(f"{zapoceti} - vstup")
-    print(f"\nvstupní parametry:\npravdivost {pravdivost}\nzapoceti {zapoceti}\ncčas zopakovat {cas_zopakovat}\n aktuální {time.time()}, rozdíl je {cas_zopakovat - time.time()}\n")
-    while pravdivost:
-        ##zapoceti = input("")
-        if zapoceti == "A":
-            informacni_text = "-----------\nmožnosti, jaké akce můžeš zvolit\n  formát: [jméno akce]......[co napsat pro tíženou akci]\
+    print("\nChceš provádět nějaké akce? \nAno ... Napiš cokoliv \nNe... nereaguj\n")
+    pravdivost = ZjistiJestliReaguje(cekaci_doba_terminalu)
+    #ze začátku zjistí jestli něco chce dělat, potom už nekontroluji - předpokládám, že uživatel když chce něco dělat, nepřestane odpovídat
+    informacni_text = "-----------\nmožnosti, jaké akce můžeš zvolit\n  formát: [jméno akce]......[co napsat pro tíženou akci]\
                 \n\tOdškrtnout(splnit) úkol ...... O, S\n\tPřidat úkol ...... P\n\tZobrazit hotové úkoly ...... Z \n---------\
                 \n\tpro ukončení napiš: K \n------------"
-            text_input = "Napiš mi tíženou akci:\n "
+    text_input = "Napiš mi tíženou akci:\n "
+    ##print(f"{zapoceti} - vstup")
+    ##print(f"\nvstupní parametry:\npravdivost {pravdivost}\nzapoceti {zapoceti}\ncčas zopakovat {cas_zopakovat}\n aktuální {time.time()}, rozdíl je {cas_zopakovat - time.time()}\n")
+    if pravdivost:
+        ##zapoceti = input("Napiš mi") #myslím, že nadbytečné, jelikož jsem už zjistil, že chce dělat akci 
+        ##if zapoceti == "A":
+            
             print(informacni_text)
             inp = input()
             #nastavení timeoutu, ať program nečeká celou dobu na uživatelský input, skončí když mu uživatel nic nedá 
@@ -204,9 +215,13 @@ while True:
                     print("%%%%%%")
                     print("\n\n"+ informacni_text)
                     inp = input(text_input)
-        else:
-            pass
-    pravdivost = True
+        #else:
+            #pass
+    pravdivost = False
     print("\tKonec akcí \n")
+    print("~"*50)
+    time.sleep(cekaci_doba_terminalu)
+    print('\x1bc')  #vymaže věci napsané v terminálu 
+    print(f"budu čekat {cas_zopakovat - time.time()} protože čas je {time.time()} a mám zopakovat v {cas_zopakovat} s intervalem {interval} neboli {interval/60} minut")
     time.sleep(max(0, cas_zopakovat - time.time())) #změna, pojistka ať nečekám 
     
