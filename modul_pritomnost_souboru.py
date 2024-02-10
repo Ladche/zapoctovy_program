@@ -10,12 +10,7 @@ NPRG030
 
 část programu: modul kontroly přítomnosti soouborů 
 """
-
 import os
-#cesta do složky, kde je tento soubor 
-#JeSouborPřitomnyVe aktuální složce kde je to spuštěné
-#cesta k spuštěněému souobru –> složka 
-#print("\n")
 
 def ZjistiCestuTady():
     "Zjistí a vypíše cestu k aktuální složce, v které je tato funkce spuštěna"
@@ -24,18 +19,13 @@ def ZjistiCestuTady():
 def ZjistiJePritomnySoubor(_soubor):
     """pokud je zadaný soubor v aktuální složce, vypíše True, jinak False """
     for i in os.listdir():
-        #pro každou složku 
-        #print(f"soubor {i} je typu {type(i)}")
         if i == _soubor:
-            #print(f"SOoubor {_soubor} je přítmncý ")
-            #print(f"soubro {i} je v aktuální složce {os.getcwd()}")
-
             return True 
     return False
 
 def NastavSoubory():
     """zjistí přítomnost souborů v složce, pokud nejsou přítomny, vytvoří je 
-    zjišťuje
+    -> zjišťuje
         - soubor s aktuálními úkoly: aktualni.txt
         - soubor s hořícími úkoly: horici.txt
         - soubor s post_due úkoly: post_due.txt 
@@ -46,10 +36,9 @@ def NastavSoubory():
     horici = "horici.txt"
     past_due = "past_due.txt"
     hotove = "hotove.txt"
-    #zjistění přítomnosti souboru s aktuálními úkoly 
+    #zjistění přítomnosti souboru s aktuálními,hořícími,hotovými a včas nesplněnými úkoly 
     for _ in range(2):
-        #při prvním načtení zjistí přítomnost a při druhém načtení založí 
-        #zjistil jsem při testování - jen jedno spuštění nestačí, hodí chybu, ovšem při druhém spuštění již funguje bezchybně 
+        #při prvním načtení zjistí přítomnost a při druhém načtení založí (zjistil jsem při testování -> jen jedno spuštění nestačí, hodí chybu, ovšem při druhém spuštění již funguje jak má )
         try:
             if ZjistiJePritomnySoubor(aktualni) == True:
                 pass
@@ -60,18 +49,13 @@ def NastavSoubory():
         except:
             print(" \tsoubor s aktuálními úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
             try:
-                cesta_k_akt = ZjistiCestuTady() + "/" + aktualni
-                #print(f"cesta je {cesta_k_akt}")
-                
+                cesta_k_akt = ZjistiCestuTady() + "/" + aktualni                
                 open(cesta_k_akt, "x")
                 print("     \tvytvořen soubor s aktuálními úkoly\n")
             except:
                 print("CHYBA - zkuste restartovat soubor")
                 #vyjímka, chyba, potřeba restartovat 
-
     for _ in range(2):
-        #při prvním načtení zjistí přítomnost a při druhém načtení založí 
-        #zjistil jsem při testování - jen jedno spuštění nestačí, hodí chybu, ovšem při druhém spuštění již funguje bezchybně 
         try:
             if ZjistiJePritomnySoubor(horici) == True:
                 pass
@@ -83,16 +67,11 @@ def NastavSoubory():
             print(" \tsoubor s hořícími úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
             try:
                 cesta_k_akt = ZjistiCestuTady() + "/" + horici
-                #print(f"cesta je {cesta_k_akt}")
-                
                 open(cesta_k_akt, "x")
                 print("     \tvytvořen soubor s hořícími úkoly\n")
             except:
                 print("CHYBA - zkuste restartovat soubor")
-
     for _ in range(2):
-        #při prvním načtení zjistí přítomnost a při druhém načtení založí 
-        #zjistil jsem při testování - jen jedno spuštění nestačí, hodí chybu, ovšem při druhém spuštění již funguje bezchybně 
         try:
             if ZjistiJePritomnySoubor(past_due) == True:
                 pass
@@ -104,15 +83,11 @@ def NastavSoubory():
             print(" \tsoubor s post due úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
             try:
                 cesta_k_akt = ZjistiCestuTady() + "/" + past_due
-                #print(f"cesta je {cesta_k_akt}")
-                
                 open(cesta_k_akt, "x")
                 print("     \tvytvořen soubor s post due úkoly\n")
             except:
                 print("CHYBA - zkuste restartovat soubor")
     for _ in range(2):
-        #při prvním načtení zjistí přítomnost a při druhém načtení založí 
-        #zjistil jsem při testování - jen jedno spuštění nestačí, hodí chybu, ovšem při druhém spuštění již funguje bezchybně 
         try:
             if ZjistiJePritomnySoubor(hotove) == True:
                 pass
@@ -124,14 +99,11 @@ def NastavSoubory():
             print(" \tsoubor s hotovými úkoly nebyl přítomný, zahajuji jeho tvorbu ")
             try:
                 cesta_k_akt = ZjistiCestuTady() + "/" + hotove
-                #print(f"cesta je {cesta_k_akt}")
-                
                 open(cesta_k_akt, "x")
                 print("     \tvytvořen soubor s hotovými úkoly\n")
             except:
                 print("CHYBA - zkuste restartovat soubor")
                 #vyjímka, chyba, potřeba restartovat 
-
     print("\nkonec úseku nastavování potřebných souborů ")
     print("-   "*20)
 
@@ -171,4 +143,3 @@ def KontrolaPritomnostiModulu():
     except:
         print(f" modul {modul_c} není přítomný")
         return False
-    
