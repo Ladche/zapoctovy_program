@@ -75,7 +75,7 @@ while True:
     """
     aktualni_cas = time.time()
     #if (aktualni_cas %)
-    cas_opakovani_za_hodinu = aktualni_cas + 2#3600
+    cas_opakovani_za_hodinu = aktualni_cas + 3600
     if (ZjistiJestliJeCelaHodina() == True) and (cas_opakovani_za_hodinu < cas_zopakovat):
        # print("pod tímto")
         #print(f"mělo by platit že {cas_opakovani_za_hodinu} < {cas_zopakovat} –> delta {cas_opakovani_za_hodinu - cas_zopakovat} s aktualnim {aktualni_cas}")
@@ -84,6 +84,7 @@ while True:
         VypisHodinoveUkoly(aktualni_cas,past_due)
         #print("HEEEJ!! JSEM TU ")
         time.sleep(cas_zopakovat-aktualni_cas)
+        print("x"*50)
         continue
     #print("ještě nad tímhle")
     #má se spustit co hodinu 
@@ -99,10 +100,10 @@ while True:
         #výpis aktuálních úkolů 
     VypisUkoly(aktualni)
         #výpis hořících úkolů 
-    print(f"hořící úkoly josu v {horici}")
-    VypisUkolyKtereHori(horici)
+    ##print(f"hořící úkoly josu v {horici}")
+    VypisUkoly(horici)
         #výpis úkolů past due 
-    VypisUkoly(past_due)
+    VypisUkolyPastDue(past_due)
     typy_atributu_pridavaneho_ukolu = [int,int,str]
     jmena_atributu_pridavaneho_ukolu = ["datum ve formátu *RRRR.MM.DD.HH.MM* kde \n\tR.. roky (například 2024)|\n\tM.. měsíc (například leden..01)|\n\tD.. datum dne v měsíci (druhý -> 02)|\n\tH.. hodina (formát 24 hodin, 01-24)|\n\tM .. minuta (0 až 60) ","NEPSAT","Jméno úkolu: "]
     #otázka, jestli chce něco dělat za akce: 
@@ -236,5 +237,5 @@ while True:
     ktery_z_casu_zopakovat = min(cas_zopakovat, cas_opakovani_za_hodinu)
     #print(f"jdu čekat {ktery_z_casu_zopakovat-time.time()}")
     time.sleep(max(0, ktery_z_casu_zopakovat - time.time())) #změna, pojistka ať nečekám 
-    """print('\x1bc')  #vymaže věci napsané v terminálu """
+    print('\x1bc')  #vymaže věci napsané v terminálu 
     

@@ -186,8 +186,8 @@ def VypisUkoly(_soubor_s_aktualnimi_ukoly, __cislovat = False):
                 print() #vizuální oddělení
                 
 
-def VypisUkolyKtereHori(_soubor_s_horicimi_ukoly):
-    """ z sb_s_hořícími_úkoly vypíšu úkoly, které mají do splnění méně než den """
+def VypisUkolyPastDue(_soubor_s_horicimi_ukoly):
+    """ z post_due vypíšu úkoly, které mají do splnění méně než den """
     #print(f"aktuální čas a datum je {_aktualni_cas}", end = '\n \n ')
     aktualizovany_soubor = ""
 
@@ -209,6 +209,7 @@ def VypisUkolyKtereHori(_soubor_s_horicimi_ukoly):
                         aktualizovana_line = line[:13] + str("X") + line[14:]
                         aktualizovany_soubor += aktualizovana_line
                 except:
+                    VypisRadku(line)
                     aktualizovany_soubor += line
     with open(_soubor_s_horicimi_ukoly, 'w') as akt:
         akt.write(str(aktualizovany_soubor))
@@ -274,7 +275,8 @@ def VypisRadku(_radka_s_past_due_ukolem):
     _hodina_past_due = _do_kdy_se_mel_splnit_cele_datum[8:10]
     _minuta_past_due = _do_kdy_se_mel_splnit_cele_datum[10:12]
     _pocet_vystrah_due = _radka_s_past_due_ukolem[13]
-    print(f"POZOR ÚKOL: \"" + str(_jmeno_ukolu_past_due) + f"\" měl být splněn {_rok_past_due}/{_mesic_past_due}/{_den_past_due} v čase {_hodina_past_due}:{_minuta_past_due}. Byl jsi na něj upozorněn již {_pocet_vystrah_due}")
+    print(f"POZOR ÚKOL: " + str(_jmeno_ukolu_past_due))
+    print(f"\tměl být splněn {_den_past_due}/{_mesic_past_due}/{_rok_past_due} v čase {_hodina_past_due}:{_minuta_past_due}. Byl jsi na něj upozorněn již {_pocet_vystrah_due}")
     print()
     #jméno úkolu, datum kdy mělo být splněno,počet jeho opakování, 
 
