@@ -13,41 +13,33 @@ NPRG030
 
 from datetime import datetime
 #import threading #pro více vláken
-import queue #pro předávání informací mezi vlákny
+#import queue #pro předávání informací mezi vlákny
 import subprocess
-import threading
+#import threading
 
 def ZjistiJestliJeCelaHodina():
-    """pokud je celá hodina, vrátí True"""
+    """pokud je v daný moment celá hodina, vrátí True"""
     _akt_zk_casik = datetime.now()
     return _akt_zk_casik.minute == 00 and _akt_zk_casik.second == 00
 
-def ZjistiDatumNaLinux(rok,mesic,den,hodina,minuta):
-    """vrátí linuxový čas v daný okamžik"""
-    ___cas1 = datetime(rok,mesic,den,hodina,minuta)
-    _____linux_cas = int(___cas1.timestamp())
-    return _____linux_cas
-
 def ZjistiStringNaSekundy(__vstup__t_):
-    #2024_02_09_14_00
-
+    """vrátí počet sekund spočítaný ze stringového vstupu """
     __s_cim_delam = str(__vstup__t_)
     __rok_ = __s_cim_delam[0:4]
     __mesicek_ = __s_cim_delam[4:6]
     __den__str_ = __s_cim_delam[6:8]
     __hodina_str_ = __s_cim_delam[8:10]
     __minuta_str_ = __s_cim_delam[10:13]
-    #python sám oddělá leading zeros 
-    ##print(f"pro vstup {__vstup__t_} je rok {__rok_} mesic{__mesicek_} den {__den__str_} hodina {__hodina_str_} minuta{__minuta_str_}.")
+    #python automaticky oddělá leading zeros při převodu, jinak by šlo použít (0o...)
     ___casik = datetime(int(__rok_),int(__mesicek_),int(__den__str_),int(__hodina_str_),int(__minuta_str_))
     __sekundovy_cas = int(___casik.timestamp())
-    ##print(f"ve funkci ZJISTIstringnasekundy je sekundový čas {__sekundovy_cas}")
     return __sekundovy_cas
 
 def ZjistiJePrestupnyRok(rok):
     """vrátí T / F podle toho jestli je daný rok přestupný """
     return (rok % 4 == 0) and ((rok % 100 != 0) or (rok % 400 == 0))
 
+#problém potencionální s přestupnými roky
 def ZjistiCisloDne( d,m,r ):
     M = [0,  31,28,31,30,31,30,  31,31,  30,31,30,31]
     for i in range(1,13):
@@ -57,21 +49,12 @@ def ZjistiCisloDne( d,m,r ):
     return (r-1)*365+(r-1)//4-(r-1)//100+(r-1)//400 + M[m-1] + d
 
 def ZjistiPocetDnuMezi(datum1, datum2):
-    """vezme si jen den, měsíc a rok a hodiny a minuty jsou mu jedno,
-      zjistí počet dní mezi daty"""
+    """zjistí počet dní mezi daty, včetně přestupných roků """
     r1,m1,d1,hodina1,minuta1 = datum1
     r2,m2,d2,hodina2,minuta2 = datum2
     return ZjistiCisloDne( d2,m2,r2 )-ZjistiCisloDne( d1,m1,r1 )
 
-def ZjistiPocetHodinMezi(datum, datum2):
-    """převede data - listy na rozdíl času v minutách """
-    rok1,mesic1,den1,hodina1,minuta1 = datum
-    rok2,mesic2,den2,hodina2,minuta2 = datum2
-    prvni = ZjistiDatumNaLinux(rok1,mesic1,den1,hodina1,minuta1)
-    druha = ZjistiDatumNaLinux(rok2,mesic2,den2,hodina2,minuta2)
-    cas = druha - prvni 
-    return cas/60
-
+#šlo by použít, pro lepší přehlednost 
 def ZjistiDatum():
     """načte rok, měsíc, den, hodina, minuta a vrátí to jako list
     když uživatel něco pokazí, vrátí 1"""
@@ -87,6 +70,7 @@ def ZjistiDatum():
             return 1
     return datum
 
+#navíc
 def ZjistiTedCasVratiList():
     """vrátí list ve formátu [ROK, MESIC, DEN, HODINA, MINUTA]"""
     rok = datetime.now().year
@@ -102,6 +86,7 @@ def ZjistiTedCasVratiList():
     vraceni_list.append(minuta)
     return  vraceni_list
 
+#nadbytečné
 def ZjistiTedCasVratiString():
     "vrátí string ve formátu ROK-MESIC-DEN-HODINA-SEKUNDA"
     rok = datetime.now().year
@@ -118,33 +103,28 @@ def ZjistiTedCasVratiString():
     return vratim
 
 def ZjistiInterval(maximum = 1440, minimum = 0):
-    """kontrola délky intervalu –> nemá smysl dávat větší než 24 hodin (1440 min), menší 0. Automaticky větší než 24 mu tedy nepovolím a zamítnu 
-        lze si nastavit vlastní hodnoty, pokud by bylo třeba 
-
-        - pokud by interval byl větší než 24 hodin, nemá moc smysl pravidelně upomínat. 
-        - maximum 24 hodin bylo zvoleno, jelikož je to největší možnost, kdy ještě zjistit 
-        že je úkol další den 
+    """kontrola délky intervalu -> u minut nemá smysl dávat větší než 24 hodin (1440), menší 0. Automaticky větší než 24 zamítnu 
+        lze si nastavit vlastní hodnoty
     """
-    
     inter = input("Zadej interval: ")
     podminka = True
     while podminka:
         try:
-            #pokud zadá string, automaticky spadne
+            #pokud zadá string místo čísla, spadne
             if int(inter)<=  maximum:
                 if int(inter) > minimum:
                     return inter
             print(f"Tvůj interval nedává s danými požadavky smysl. Vyber si nějaký v rozmezí {minimum} <-> {maximum}\nZvol si nějaký, který bude smysluplný:")
             inter = input()
         except:
-            #pokud zadal string 
+            #pokud nezadal int
             print("Tvůj vstup je špatně zadaný, zadej znovu smysluplnější:")
             inter = input()  
 
-def ZjistiVstup(timeout_ = 5,text_tisk = ""):
-    f"""Čeká dobu *timeout* na vstup, automaticky {timeout_} sekund, jinak vrátí False a prázdný string.
-    Pokud se zadá vstup, vrátí daný vstup a True"""
-    
+#nejspíše nadbytečné
+"""def ZjistiVstup(timeout_ = 5,text_tisk = ""):
+    #Čeká dobu *timeout* na vstup, automaticky {timeout_} sekund, jinak vrátí False a prázdný string.
+    #Pokud se zadá vstup, vrátí daný vstup a True
     fronta = queue.Queue()
     def cteni_vstupu_(fronta):
         try:
@@ -165,36 +145,6 @@ def ZjistiVstup(timeout_ = 5,text_tisk = ""):
     
     else:
         
-        return fronta.get()
-
-"""def ZjistiVstup(timeout_=5, text_tisk=""):
-    #Čeká dobu *timeout* na vstup, automaticky {timeout_} sekund, jinak vrátí False a prázdný string.
-    #Pokud se zadá vstup, vrátí daný vstup a True
-    
-    running = [True]  #proti hromadění vstupů, jak se předtím stávalo již u druhé iterace 
-
-    def cteni_vstupu_(fronta, running):
-        while running[0]:
-            try:
-                vstup = input(text_tisk)
-                fronta.put((True, vstup))
-                break  
-            except:
-                fronta.put((False, ""))
-                break
-
-    fronta = queue.Queue()
-    vlakno_vstup = threading.Thread(target=cteni_vstupu_, args=(fronta, running))
-    vlakno_vstup.daemon = True
-    vlakno_vstup.start()
-
-    vlakno_vstup.join(timeout=timeout_)
-
-    if vlakno_vstup.is_alive():
-        print("\t\tČas vypršel, vstup nebyl zadán.")
-        running[0] = False  # Signalizujeme vláknu, aby se ukončilo
-        return False, ""
-    else:
         return fronta.get()"""
 
 def ZjistiJestliReaguje(__doba_cekani_na_uzivatelsky_vstup___):
