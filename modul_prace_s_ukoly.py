@@ -11,12 +11,15 @@ NPRG030
 část programu: potřebný modul práce s úkoly 
 """
 import random 
+from modul_casove_operace import ZjistiStringNaSekundy
+
 #pro náhodný výběr motivujícíc hlášky během výstrah
 
 
 def PresunzAdoB(_soubor_odkud, _soubor_kam,_ktery_radek):
     """přečte celý soubor, přesune zadanou řádku z souboru A -> B a přepíše soubor B tak, že v souboru A už nebude daná řádka """
     #vždy musí být odsazeno v souboru už před, dá nový řádek pro další řádku 
+    #print(f"zavolána funkce PresunzAdoB na řádku {_ktery_radek} z {_soubor_odkud} -> {_soubor_kam}")
     aktualni_radka = 0
     meneny_radek = ""
     obsah_s_odkud = ""
@@ -39,9 +42,9 @@ def PresunzAdoB(_soubor_odkud, _soubor_kam,_ktery_radek):
         soubor1.write(str(obsah_s_odkud) )#+ "\n")
     with open(_soubor_kam, 'a') as soubor2:#soubor kam dopisu
         soubor2.write(str(meneny_radek))
+    
     #print("uspesne zmeneno :D")
-    #print("-------------------")
-    #print(f"meneny radek je {meneny_radek}")
+    #print(f"ZAVOLANO: meneny radek je {meneny_radek}")
 
 def PridejUkol(_typy_atributu_co_maji_byt, _soubor,_jmena_atributu = None):
     """typy atributu -- List, soubor -- 'soubor.txt',jmena_atributu = list se stringy které uvidí uživatel
@@ -194,7 +197,7 @@ def VypisUkolyKtereHori(_aktualni_cas,_soubor_s_horicimi_ukoly):
     with open(_soubor_s_horicimi_ukoly, 'r') as zdroj:
         #print("přivolána funkce vypisukoly které hoří ")
         for line in zdroj: 
-            ##print(f"\n %%%% \n aktuální řádka: {line}")
+            print(f"\n %%%% \n aktuální řádka: {line} délky {len(line)} s počtem výstrah {line[13]}")
             pocet_vystrah = int(line[13]) 
 
             #zjistím datum úkolu a jeslti je menší než 
@@ -249,32 +252,70 @@ def VypisRadku(_radka_s_past_due_ukolem):
     print(f"úkol {_jmeno_ukolu_past_due} měl být splněn {_rok_past_due}/{_mesic_past_due}/{_den_past_due} \
           v čase {_hodina_past_due}:{_minuta_past_due}. Byl jsi na něj upozorněn již {_pocet_vystrah_due}")
     #jméno úkolu, datum kdy mělo být splněno,počet jeho opakování, 
-                   
-def PresunPodleCasuZAdoB(_cas,_souborA,_souborB,_Kolik_ma_zbyt):
+
+#asi odstranit ?? 
+def PresunPodleCasuZAdoB_(_cas,_souborA,_souborB,_Kolik_ma_zbyt):
     """pokud je čas do plnění méně nebo kolik-má-zbýt tak přesune úkol ze souboru A do souboru B
         pro 24 hodin -- 1_00_00 –> odpovídá 01(D)24(H)59(M)
         pro 0 hodin -- 0
        """
     #chci zavoalt přesuňZAdoB na potřebné řádky 
     _aktualni_r = 0
-    with open(_souborA, "r") as _A:
-        _max_radku = sum(1 for _ in _A) 
-        while _aktualni_r < _max_radku:
-            for _radek in _A:
+    print("spuštěna funkce přesuňpodlečasu")
+    with open(_souborA, "r") as _aa:
+        print("otevřel jsem soubor A")
+        _max_radku = sum(1 for _ in _aa) 
+        print(f"našel jsem nejdelší řádek v souboru {_souborA}: {_max_radku}")
+        while _aktualni_r < (_max_radku+1):
+            print(f"zkoumám řádky\n")
+            for _radek in _aa:
+                print(f"zkoumám řádek {_radek}")
                 _datum_radky = int(_radek[0:10])
                 #vyzvedne číslo - datum splnění úkolu 
                 #rozdil pod 10000 - šlo by přepočítat na minuty, ale takto ulehčuji a je to obecnější 
                 _zbyva_casu = _datum_radky - _cas
+                print(f"pro řádek {_radek}\nje: aktuální {_cas}-získáno ze vstupu,zbývá {_zbyva_casu} ")
                 if _zbyva_casu <= _Kolik_ma_zbyt:
+                    print("tento řádek bych měl přesunout z souoru A do B a znovu hledám ")
                     #budu měnit danou řádku –> přesunu ji do druhého souboru 
                     x = PresunzAdoB(_souborA,_souborB,_aktualni_r)
                     _aktualni_r = 0
                     #začnu prohledávat odznova
                 else:
+                    print("tento řádek nebylo potřeba přesuout")
                     _aktualni_r += 1
+            return 
 
+def PresunPodleCasuZAdoB(_cas, _souborA, _souborB, _Kolik_ma_zbyt):
+    """v sekundách, kolik má zbýt času """
+    with open(_souborA, "r") as _aa:
+        radky = _aa.readlines()  # Přečte všechny řádky najednou
+
+    _aktualni_r = 0
+    while (_aktualni_r) < (len(radky)):
+        #print(f"tady to padá: aktualni_radek{_aktualni_r},radky josu v rozsahu {len(radky)}")
+        _radek = radky[_aktualni_r]
+        #print(f"zkousám řádek {_radek}")
+        
+        # Zde doplňte logiku pro zpracování řádku
+        _datum_radky = int(_radek[0:12])
+        #print(f"budu volat ZjiSTRnaSEk a dávám mu datum řádky jako {_datum_radky}")
+        __porovnavany_cas_datum_radky = ZjistiStringNaSekundy(_datum_radky)
+        _zbyva_casu = __porovnavany_cas_datum_radky - _cas
+        ##print(f"zkoumám řádek {_radek}, zbývá {_zbyva_casu} <= {_Kolik_ma_zbyt} a datum splnění řádky je {_datum_radky} neboli {__porovnavany_cas_datum_radky}sekund")
+
+        if _zbyva_casu <= _Kolik_ma_zbyt:
+            #print(f"\t\tměním řádek {_radek} s číslem _{_aktualni_r}_, jelikož zbývá {_zbyva_casu} a má mít více než {_Kolik_ma_zbyt}")
+            # Logika pro přesun řádku z A do B
+            PresunzAdoB(_souborA, _souborB, _aktualni_r+1)
+            ##print(f"zavolal jsem přesunutí řádky {_radek}")
+            radky.pop(_aktualni_r)  # Odstranění řádku, který byl právě zpracován
+            # Nezvyšujeme _aktualni_r, protože jsme odstranili aktuální řádek
+        else:
+            _aktualni_r += 1  # Pokračujeme na další řádek
     
                  
+
 
                 
 

@@ -20,9 +20,26 @@ import threading
 
 def ZjistiDatumNaLinux(rok,mesic,den,hodina,minuta):
     """vrátí linuxový čas v daný okamžik"""
-    cas1 = datetime(rok,mesic,den,hodina,minuta)
-    linux_cas = int(cas1.timestamp())
-    return linux_cas
+    ___cas1 = datetime(rok,mesic,den,hodina,minuta)
+    _____linux_cas = int(___cas1.timestamp())
+    return _____linux_cas
+
+def ZjistiStringNaSekundy(__vstup__t_):
+    #2024_02_09_14_00
+
+    __s_cim_delam = str(__vstup__t_)
+    __rok_ = __s_cim_delam[0:4]
+    __mesicek_ = __s_cim_delam[4:6]
+    __den__str_ = __s_cim_delam[6:8]
+    __hodina_str_ = __s_cim_delam[8:10]
+    __minuta_str_ = __s_cim_delam[10:13]
+    #python sám oddělá leading zeros 
+    ##print(f"pro vstup {__vstup__t_} je rok {__rok_} mesic{__mesicek_} den {__den__str_} hodina {__hodina_str_} minuta{__minuta_str_}")
+    ___casik = datetime(int(__rok_),int(__mesicek_),int(__den__str_),int(__hodina_str_),int(__minuta_str_))
+    __sekundovy_cas = int(___casik.timestamp())
+    ##print(f"ve funkci ZJISTIstringnasekundy je sekundový čas {__sekundovy_cas}")
+    return __sekundovy_cas
+
 
 
 def ZjistiJePrestupnyRok(rok):
