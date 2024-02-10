@@ -123,44 +123,41 @@ def Atributy(__typy_atributu_na_kontrolu,__nazvy_atributu = ""):
                     return 1
     return __atributy
 
-def Vystraha(_pocet_opakovani, _zbyvajici_cas__):
+def Vystraha(_zbyvajici_cas__):
     
-    print(f"  počet opakování: {_pocet_opakovani} \n      zbyvájící, delta času je {_zbyvajici_cas__}")
-    list_motiv1 = ["jdi do toho!"]
-    list_motiv2 = ["Už se ti blíží termín, ale ještě máš šanci :D"]
-    list_motiv3 = ["S kazni prichazi svoboda. Posledni sance to stihnout bro "]
-    if _pocet_opakovani == 0:
-        #první výstraha, ještě žádná nebyla předtím 
-        print(f"blíží se ti termín! máš ho za {_zbyvajici_cas__}, toto je tvá první výstraha")
+    ##print(f"\tzbyvájící čas je {_zbyvajici_cas__}")
+    #hlášky na to, když nesplní úkol - 1h, 2h, 3h po datumu splnění 
+    list_motiv1 = ["jdi do toho!"] #hodina po až dvě 
+    list_motiv2 = ["Už jsi po termínu, ale nelámej hlavu "] #dvě až tři hodiny 
+    list_motiv3 = ["S kázní přichází svoboda"] #tři až čtyři hodiny po 
+    #předělat na kontrolu zbývajícího času 
+    if _zbyvajici_cas__ > -3600:
+        #nultá  výstraha, ještě žádná nebyla předtím 
+        print(f"Pojď na to! Tento úkol jsi měl před {int(abs(_zbyvajici_cas__)/60)} min, toto je připomenutí")
         return
     #chci aby mi skončila funkce, když nastane první možnost 
-    if _pocet_opakovani == 1: 
-        #druhá výstraha
+    if (_zbyvajici_cas__ > -7200) and (_zbyvajici_cas__ < -3600): 
+        #první výstraha
         index_1 = random.randrange(0,len(list_motiv1))
-        print()
-        print(list_motiv1[index_1])
-        print(f"zbývá ti ještě: " + str(_zbyvajici_cas__))
-        ###print(f"TADY DOPSAT MOTIVUJICI HLASKU NA PRVNI OPAKOVANÍ, jedná se o tvoji druhou výstrahu ") 
+        print("\t" + list_motiv1[index_1])
+        print(f"\tJe to první připomenutí úkolu, co jsi měl před {int(abs(_zbyvajici_cas__)/60)}min, vrhni se na něj!")
         return
-    if _pocet_opakovani == 2: 
-        #druhá výstraha - vytisknu náhodnou povzbuzující hlášku 
-        ##print(f"TADY DOPSAT MOTIVUJICI HLASKU NA DRUHEEE OPAKOVANI, jedná se o tvoji třetí výstrahu ")
+    if (_zbyvajici_cas__ > -10800) and (_zbyvajici_cas__ < -7200): 
+        #druhá 
         index_2 = random.randrange(0,len(list_motiv2))
-        print()
-        print(list_motiv2[index_2])
-        print(f"zbývá ti ještě: " + str(_zbyvajici_cas__))
+        print("\t" + list_motiv2[index_2])
+        print(f"\tDruhé připomenutí úkolu, který jsi chtěl splnit před {int(abs(_zbyvajici_cas__)/60)} min")
         return 
-    if _pocet_opakovani == 3: 
-        ##print(f"KAMO UZ TO MAS FAKT BLIZKO DELEJ NECO S TIM HELE UZ, už máš více než 3 výstrahy ")
+    if (_zbyvajici_cas__ > -14400) and (_zbyvajici_cas__ < -10800): 
+       #třetí výstraha 
         index_3 = random.randrange(0,len(list_motiv3))
-        print()
-        print(list_motiv3[index_3])
-        print(f"zbývá ti ještě: " + str(_zbyvajici_cas__))
+        print("\t" + list_motiv3[index_3])
+        print(f"\tNezapomeň, tento úkol jsi chtěl splnit! Tak na co váháš a pojď na to! Chtěl jsi to udělat už před: {int(abs(_zbyvajici_cas__)/60)}min")
         return 
-    if _pocet_opakovani >3:
+    if _zbyvajici_cas__ < -86400:
+        #24 hodin s
         #doporučení psychologa 
-        print()
-        print(f"Již jsi nesplnil úkol více než 3x. Zkus se prosím s kvalifikovaným psychologem poradit o chronické prokrastinaci.")
+        print(f"\tJiž jsi nesplnil tento úkol přes 24 hodin. Zkus se prosím s kvalifikovaným psychologem poradit o chronické prokrastinaci.")
         return 
 
 def VypisUkoly(_soubor_s_aktualnimi_ukoly, __cislovat = False):
@@ -189,7 +186,34 @@ def VypisUkoly(_soubor_s_aktualnimi_ukoly, __cislovat = False):
                 print() #vizuální oddělení
                 
 
-def VypisUkolyKtereHori(_aktualni_cas,_soubor_s_horicimi_ukoly):
+def VypisUkolyKtereHori(_soubor_s_horicimi_ukoly):
+    """ z sb_s_hořícími_úkoly vypíšu úkoly, které mají do splnění méně než den """
+    #print(f"aktuální čas a datum je {_aktualni_cas}", end = '\n \n ')
+    aktualizovany_soubor = ""
+
+    with open(_soubor_s_horicimi_ukoly, 'r') as zdroj:
+        #print("přivolána funkce vypisukoly které hoří ")
+        for line in zdroj: 
+            if len(line) >1:#vyřešení problému s koncovou řádkou- mezerou na konci souboru
+                ##print(f"aktuální řádka: {line} délky {len(line)} ")
+                try:
+                    pocet_vystrah = int(line[13]) 
+                    VypisRadku(line)
+                    if pocet_vystrah <=8:
+                        aktualizovana_vystraha = pocet_vystrah + 1
+                        aktualizovana_line = line[:13] + str(aktualizovana_vystraha) + line[14:]
+                        aktualizovany_soubor += aktualizovana_line
+                    else:
+                        #ochrana proti přetečení při příliš častému opakování 
+                        aktualizovana_vystraha = pocet_vystrah + 1
+                        aktualizovana_line = line[:13] + str("X") + line[14:]
+                        aktualizovany_soubor += aktualizovana_line
+                except:
+                    aktualizovany_soubor += line
+    with open(_soubor_s_horicimi_ukoly, 'w') as akt:
+        akt.write(str(aktualizovany_soubor))
+
+def VypisUkolyKtereHori__(_aktualni_cas,_soubor_s_horicimi_ukoly):
     """ z sb_s_hořícími_úkoly vypíšu úkoly, které mají do splnění méně než den """
     #print(f"aktuální čas a datum je {_aktualni_cas}", end = '\n \n ')
     aktualizovany_soubor = ""
@@ -235,6 +259,7 @@ def VypisUkolyKtereHori(_aktualni_cas,_soubor_s_horicimi_ukoly):
     with open(_soubor_s_horicimi_ukoly, 'w') as akt:
         akt.write(str(aktualizovany_soubor))
 
+
 def VypisRadku(_radka_s_past_due_ukolem):
     #chci speciálně vypsast úkoly, které už jsou po termínu a já mu je chci říct 
     #print("\n\nfunkce VypisRadku")
@@ -249,8 +274,8 @@ def VypisRadku(_radka_s_past_due_ukolem):
     _hodina_past_due = _do_kdy_se_mel_splnit_cele_datum[8:10]
     _minuta_past_due = _do_kdy_se_mel_splnit_cele_datum[10:12]
     _pocet_vystrah_due = _radka_s_past_due_ukolem[13]
-    print(f"úkol {_jmeno_ukolu_past_due} měl být splněn {_rok_past_due}/{_mesic_past_due}/{_den_past_due} \
-          v čase {_hodina_past_due}:{_minuta_past_due}. Byl jsi na něj upozorněn již {_pocet_vystrah_due}")
+    print(f"POZOR ÚKOL: \"" + str(_jmeno_ukolu_past_due) + f"\" měl být splněn {_rok_past_due}/{_mesic_past_due}/{_den_past_due} v čase {_hodina_past_due}:{_minuta_past_due}. Byl jsi na něj upozorněn již {_pocet_vystrah_due}")
+    print()
     #jméno úkolu, datum kdy mělo být splněno,počet jeho opakování, 
 
 #asi odstranit ?? 
@@ -313,66 +338,29 @@ def PresunPodleCasuZAdoB(_cas, _souborA, _souborB, _Kolik_ma_zbyt):
             # Nezvyšujeme _aktualni_r, protože jsme odstranili aktuální řádek
         else:
             _aktualni_r += 1  # Pokračujeme na další řádek
-    
-                 
 
-
+from modul_casove_operace import ZjistiStringNaSekundy
+def VypisHodinoveUkoly(_aktualni_cas,__soubor__s_post_ukoly):
+    """ z souboru vypíšu úkoly, které mají po  splnění """
+    #nechci měnit počet upozornění 
+    aktualizovany_soubor = ""
+    with open(__soubor__s_post_ukoly, 'r') as zdroj:
+        for line in zdroj: 
+            if len(line) >12:#vyřešení problému s koncovou řádkou- mezerou na konci souboru
+               ###print(f"aktuální řádka: {line} délky {len(line)} ")
                 
-
-
-
-
-"""
-soubor_s_ukoly = 'uk_test.txt'
-#VypisUkoly(soubor_s_ukoly)
-
-jmena_parametru_ukolu = ["datum splnění Rok_Měsíc_Den_Hodina_Minuta", "počet opakování", "jméno úkolu"]
-typy_pyrametru_ukolu = [int, int, str]
-
-#soubor s aktuálními úkoly 
-soubor_aktualni_ukoly =     'uk_test.txt'
-soubor_s_horicimi_ukoly =   'uk_hori.txt'
-
-pokracovat = True
-while pokracovat == True:
-    #udělají se funkce 
-     #   přečtu aktuální úkoly
-      #  zjistím čas
-      #  porovnám čas s úkoly
-      #  jestli se blíží nějaký úkol, tak ho vypíšu 
-      #  jestli je už po nějakém úkolu tak 
-      #  zeptám se jestli chce něco dělat 
-      #  
-  #začátek když se spustí smyčka 
-    
-    #aktualni_cas_zjisteny = int(ZjistiTedCasVratiString())
-    #POZOR ODDĚLAT ZE ZÁVOREK!!
-    #
-    #aktualni_cas_zjisteny = 1000
-    #VypisUkoly(soubor_aktualni_ukoly)
-   # VypisUkoly(soubor_aktualni_ukoly)
-   # VypisUkolyKtereHori(aktualni_cas_zjisteny, soubor_s_horicimi_ukoly)
-    
-    #ukolykterepastdue(soubor_s_horicimi_ukoly)
-    #chces_odstrknout_horici_ukoly(soubor_s_horicimi_ukoly,soubor_s_hotovymi_ukoly, ??)
-    #chces si odskrtnout nehorici ukoly( soubor_s_aktualnimi ukoly, soubor s hotovymi ukoly, )
-    #chces pridat ukol() –> hotovy modul 
-    # chces si zobrazit hotove ukoly(soubr s hotovymi ukoly )
-    #pravidelne ukoly - pridani pravidelnych ukolu ??? 
-    #NE ! rozvrh hodin??? - pravidelne ukoly ktere musim pridat a sty splnit - takze zase nějaké opakování 
-    # 
-
-    
-
-
-
-
-    
-    #PridejUkol(typy_pyrametru_ukolu, soubor_aktualni_ukoly, jmena_parametru_ukolu)
-    pokracovat = False
-print("funguju ")
-
-"""
-
-
+        
+                __x_termin_ukolu = int(line[0:12])
+                ##print(f"termín úkolu je {__x_termin_ukolu}_")
+                #print(f"čas a datum je {_aktualni_cas}")
+                __c_termin_ukolu_sekundy = ZjistiStringNaSekundy(__x_termin_ukolu)
+                __x_delta_casu = __c_termin_ukolu_sekundy - _aktualni_cas
+                ##print(f"delta času je {__x_delta_casu} = {__c_termin_ukolu_sekundy} - {_aktualni_cas}")
+                ##print(f"\n ----- \n výpočet delty času: \n delta času .. {delta_casu} = {termin_ukolu} - {_aktualni_cas}\n termín úkolu je {termin_ukolu} \n aktuální čas je {_aktualni_cas}")
+                #print(f"Hořící úkol: {line[15:]}")
+                            #změna pořadí, bylo to opačně
+                #Vystraha(pocet_vystrah, delta_casu)
+                __nazev_ukolu_ = line[14:]
+                print(f"úkol: {__nazev_ukolu_}")
+                Vystraha(__x_delta_casu)
 

@@ -14,9 +14,13 @@ NPRG030
 from datetime import datetime
 #import threading #pro více vláken
 import queue #pro předávání informací mezi vlákny
-import time
 import subprocess
 import threading
+
+def ZjistiJestliJeCelaHodina():
+    """pokud je celá hodina, vrátí True"""
+    _akt_zk_casik = datetime.now()
+    return _akt_zk_casik.minute == 00 and _akt_zk_casik.second == 00
 
 def ZjistiDatumNaLinux(rok,mesic,den,hodina,minuta):
     """vrátí linuxový čas v daný okamžik"""
@@ -34,7 +38,7 @@ def ZjistiStringNaSekundy(__vstup__t_):
     __hodina_str_ = __s_cim_delam[8:10]
     __minuta_str_ = __s_cim_delam[10:13]
     #python sám oddělá leading zeros 
-    ##print(f"pro vstup {__vstup__t_} je rok {__rok_} mesic{__mesicek_} den {__den__str_} hodina {__hodina_str_} minuta{__minuta_str_}")
+    ##print(f"pro vstup {__vstup__t_} je rok {__rok_} mesic{__mesicek_} den {__den__str_} hodina {__hodina_str_} minuta{__minuta_str_}.")
     ___casik = datetime(int(__rok_),int(__mesicek_),int(__den__str_),int(__hodina_str_),int(__minuta_str_))
     __sekundovy_cas = int(___casik.timestamp())
     ##print(f"ve funkci ZJISTIstringnasekundy je sekundový čas {__sekundovy_cas}")

@@ -45,7 +45,7 @@ def NastavSoubory():
     print("začátek úseku nastavování souborů ")
     aktualni = "aktualni.txt"
     horici = "horici.txt"
-    post_due = "post_due.txt"
+    past_due = "past_due.txt"
     hotove = "hotove.txt"
     #zjistění přítomnosti souboru s aktuálními úkoly 
     for _ in range(2):
@@ -95,16 +95,16 @@ def NastavSoubory():
         #při prvním načtení zjistí přítomnost a při druhém načtení založí 
         #zjistil jsem při testování - jen jedno spuštění nestačí, hodí chybu, ovšem při druhém spuštění již funguje bezchybně 
         try:
-            if ZjistiJePritomnySoubor(post_due) == True:
+            if ZjistiJePritomnySoubor(past_due) == True:
                 pass
             else:
-                cesta_k_akt = ZjistiCestuTady() + "/" + post_due
+                cesta_k_akt = ZjistiCestuTady() + "/" + past_due
                 with open(cesta_k_akt, "r") as f:
                     s = f.readline
         except:
             print(" \tsoubor s post due úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
             try:
-                cesta_k_akt = ZjistiCestuTady() + "/" + post_due
+                cesta_k_akt = ZjistiCestuTady() + "/" + past_due
                 #print(f"cesta je {cesta_k_akt}")
                 
                 open(cesta_k_akt, "x")
