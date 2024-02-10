@@ -198,7 +198,7 @@ def VypisUkolyPastDue(_soubor_s_horicimi_ukoly):
                 ##print(f"aktuální řádka: {line} délky {len(line)} ")
                 try:
                     pocet_vystrah = int(line[13]) 
-                    VypisRadku(line)
+                    VypisRadku(line, True)
                     if pocet_vystrah <=8:
                         aktualizovana_vystraha = pocet_vystrah + 1
                         aktualizovana_line = line[:13] + str(aktualizovana_vystraha) + line[14:]
@@ -209,7 +209,7 @@ def VypisUkolyPastDue(_soubor_s_horicimi_ukoly):
                         aktualizovana_line = line[:13] + str("X") + line[14:]
                         aktualizovany_soubor += aktualizovana_line
                 except:
-                    VypisRadku(line)
+                    VypisRadku(line, True)
                     aktualizovany_soubor += line
     with open(_soubor_s_horicimi_ukoly, 'w') as akt:
         akt.write(str(aktualizovany_soubor))
@@ -260,25 +260,40 @@ def VypisUkolyKtereHori__(_aktualni_cas,_soubor_s_horicimi_ukoly):
     with open(_soubor_s_horicimi_ukoly, 'w') as akt:
         akt.write(str(aktualizovany_soubor))
 
-
-def VypisRadku(_radka_s_past_due_ukolem):
+def VypisRadku(_radka_s_neco_ukolem,byl = False):
+    """pokud False, tak píše hořící se úkoly, pokud True, píše úkoly co již měly být splněné past due
+    - False -> hořící úkoly
+    - True -> past due úkoly
+    """
     #chci speciálně vypsast úkoly, které už jsou po termínu a já mu je chci říct 
     #print("\n\nfunkce VypisRadku")
-    _do_kdy_se_mel_splnit_cele_datum = _radka_s_past_due_ukolem[:12]
-    ##print(f"pro řádku {_radka_s_past_due_ukolem}\n bylo datum splnění {_do_kdy_se_mel_splnit_cele_datum}")
-    ##print(f"KONTORLA : ŘÁDKA JE |{_radka_s_past_due_ukolem}.")
-    ##print(f"KONTROLNÍ PRINT. délka řádky |{len(_radka_s_past_due_ukolem)}")
-    _jmeno_ukolu_past_due = _radka_s_past_due_ukolem[15:]
-    _rok_past_due = _do_kdy_se_mel_splnit_cele_datum[0:4]
-    _mesic_past_due = _do_kdy_se_mel_splnit_cele_datum[4:6]
-    _den_past_due = _do_kdy_se_mel_splnit_cele_datum[6:8]
-    _hodina_past_due = _do_kdy_se_mel_splnit_cele_datum[8:10]
-    _minuta_past_due = _do_kdy_se_mel_splnit_cele_datum[10:12]
-    _pocet_vystrah_due = _radka_s_past_due_ukolem[13]
-    print(f"POZOR ÚKOL: " + str(_jmeno_ukolu_past_due))
-    print(f"\tměl být splněn {_den_past_due}/{_mesic_past_due}/{_rok_past_due} v čase {_hodina_past_due}:{_minuta_past_due}. Byl jsi na něj upozorněn již {_pocet_vystrah_due}")
-    print()
-    #jméno úkolu, datum kdy mělo být splněno,počet jeho opakování, 
+    if byl == True:
+        _do_kdy_se_mel_splnit_cele_datum = _radka_s_neco_ukolem[:12]
+        ##print(f"pro řádku {_radka_s_past_due_ukolem}\n bylo datum splnění {_do_kdy_se_mel_splnit_cele_datum}")
+        ##print(f"KONTORLA : ŘÁDKA JE |{_radka_s_past_due_ukolem}.")
+        ##print(f"KONTROLNÍ PRINT. délka řádky |{len(_radka_s_past_due_ukolem)}")
+        _jmeno_ukolu_past_due = _radka_s_neco_ukolem[15:]
+        _rok_past_due = _do_kdy_se_mel_splnit_cele_datum[0:4]
+        _mesic_past_due = _do_kdy_se_mel_splnit_cele_datum[4:6]
+        _den_past_due = _do_kdy_se_mel_splnit_cele_datum[6:8]
+        _hodina_past_due = _do_kdy_se_mel_splnit_cele_datum[8:10]
+        _minuta_past_due = _do_kdy_se_mel_splnit_cele_datum[10:12]
+        _pocet_vystrah_due = _radka_s_neco_ukolem[13]
+        print(f"ÚKOL: " + str(_jmeno_ukolu_past_due))
+        print(f"\tměl být splněn {_den_past_due}/{_mesic_past_due}/{_rok_past_due} v čase {_hodina_past_due}:{_minuta_past_due}. Byl jsi na něj upozorněn již {_pocet_vystrah_due}")
+        print()
+        #jméno úkolu, datum kdy mělo být splněno,počet jeho opakování, 
+    if byl == False:
+        _do_kdy_se_mel_splnit_cele_datum_horici = _radka_s_neco_ukolem[:12]
+        _jmeno_ukolu_horici_ = _radka_s_neco_ukolem[15:]
+        _rok_horici_ = _do_kdy_se_mel_splnit_cele_datum_horici[0:4]
+        _mesic_horici_ = _do_kdy_se_mel_splnit_cele_datum_horici[4:6]
+        _den_horici_ = _do_kdy_se_mel_splnit_cele_datum_horici[6:8]
+        _hodina_horici_ = _do_kdy_se_mel_splnit_cele_datum_horici[8:10]
+        _minuta_horici_ = _do_kdy_se_mel_splnit_cele_datum_horici[10:12]
+        print(f"Pozor blíží se úkol: " + str(_jmeno_ukolu_horici_))
+        print(f"\t splň ho do {_den_horici_}/{_mesic_horici_}/{_rok_horici_} do {_hodina_horici_}:{_minuta_horici_}")
+        print()
 
 #asi odstranit ?? 
 def PresunPodleCasuZAdoB_(_cas,_souborA,_souborB,_Kolik_ma_zbyt):
@@ -366,3 +381,9 @@ def VypisHodinoveUkoly(_aktualni_cas,__soubor__s_post_ukoly):
                 print(f"úkol: {__nazev_ukolu_}")
                 Vystraha(__x_delta_casu)
 
+def VypisUkolyKtereHori(_soubor_s_horicimi_ukoly):
+    with open(_soubor_s_horicimi_ukoly, 'r') as zdroj:
+        for line in zdroj: 
+            if len(line) >12:#vyřešení problému s koncovou řádkou- mezerou na konci souboru
+                ##print(f"aktuální řádka: {line} délky {len(line)} ")
+                VypisRadku(line)
