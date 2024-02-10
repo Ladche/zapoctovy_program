@@ -10,30 +10,21 @@ NPRG030
 
 část programu: kostra programu
 """
-
-
 import time 
 from modul_casove_operace import *
 from modul_prace_s_ukoly import *
 from modul_pritomnost_souboru import *
 
 motivujici_hlasky = ["Skvělá práce! Máš hotový další úkol!"]
-#motivující hlášky při splnění úkolu
-
-#------------------–––––––––––––––––––––––––––––––––––––-
+#motivující hlášky zobrazené při splnění úkolu
 
 #nastavení programu - vytvoření potřebných souborů, pokud již nejsou přítomny v aktuální složce 
-
 aktualni = "aktualni.txt"
 horici = "horici.txt"
 past_due = "past_due.txt"
 hotove = "hotove.txt"
-
-#nastavovani_souboru_pri_startu = NastavSoubory()
 print("Nastavuji program:")
 NastavSoubory()
-
-
 
 #zjištění přítomnosti potřebných modulů 
 if KontrolaPritomnostiModulu == False:
@@ -41,89 +32,59 @@ if KontrolaPritomnostiModulu == False:
     assert("CHYBA")
 else:
     print("kontrola potřebných modulů proběhla úspěšně ")
-
 print("Nastavení úspěšné")
 print("-"*50, end = "\n\n")
-#konec nastavení 
+#konec nastavení programu 
 
-#hlavní část - opakující se
-
-
-"""#varianta 2 - můžu použít funkci ZjistiInterval()
+#hlavní část 
 print("Napiš jak často (v minutách) chceš aby se ti opakovalo vypisování a upozorňování na úkoly")
-interval = int(ZjistiInterval()) *60
+interval = int(ZjistiInterval(1439)) *60 #necelých 24 hodin mi přijde jako smysluplná horní mez vzhledem k cíli programu
 print("Napiš jak kolik času v sekundách chceš, aby program čekal na tvoji odpověď")
-timeout = int(ZjistiInterval((30)))#heuristicky si myslím, že 10 sekundový interval na to, abych se rozhodl jestli chci 
-                                #dělat nějakou akci je dostačující
+timeout = int(ZjistiInterval((60))) #horní hranice minuty pro zadání vstupu mi přijde dostačující
 print("Napiš kolik sekund chceš vidět úkoly, co jsi dělal - po ukončení tvojich (případných) akcí. Minimálně je 1s a maximum je hodina")
-doba_ponechani_terminalu = int(ZjistiInterval(3599,1))
-"""
-cas_zopakovat = 40
-timeout = 10
-interval = 50 #ODEBRAT "!!!!!" nastaveno na 3 sekundy
-#cekaci_doba_terminalu = 20
-doba_ponechani_terminalu = 30 #max hodisna 
+doba_ponechani_terminalu = int(ZjistiInterval(interval,1)) #nemá smysl nechávat terminál déle než je interval mezi připomínáními
+
+cas_zopakovat = 0 #prvotní nastavení pro hodinové kontroly
 while True:
-    #tady chci kontrolovat hořící úkoly a kdyžtak vypsat výstrahu, že zbývá 1h / 2h / 3h
-    """
-    kontrolovat každou hodinu 
-    každé ráno v 9 přijde hláška 
-    if 24 hodin po
-    if 3 hodiny po 
-    if 2 hodiny  po 
-    if hodina  po
-    """
     aktualni_cas = time.time()
-    #if (aktualni_cas %)
     cas_opakovani_za_hodinu = aktualni_cas + 3600
     if (ZjistiJestliJeCelaHodina() == True) and (cas_opakovani_za_hodinu < cas_zopakovat):
-       # print("pod tímto")
-        #print(f"mělo by platit že {cas_opakovani_za_hodinu} < {cas_zopakovat} –> delta {cas_opakovani_za_hodinu - cas_zopakovat} s aktualnim {aktualni_cas}")
-        #if True and (cas_opakovani_za_hodinu < cas_zopakovat):  
-        #print("aka hodina uplynula ")
+        #každou hodinu připomenutí úkolů, které již měly být splněné 
         VypisHodinoveUkoly(aktualni_cas,past_due)
-        #print("HEEEJ!! JSEM TU ")
         time.sleep(cas_zopakovat-aktualni_cas)
         print("x"*50)
         continue
-    #print("ještě nad tímhle")
-    #má se spustit co hodinu 
-    #cílem aby program běžel nonstop v pozadí 
-    #aktualni_cas = time.time()
-    cas_zopakovat = aktualni_cas + interval
-    #čas nového spuštění 
+
+    aktualni_cas = time.time() #aktualizace času, předchozí blok může trvat určitou i když velmi krátkou dobu - lze případně tento řádek zanedbat
+    cas_zopakovat = aktualni_cas + interval #vypočítání času nového spuštění
+
     #potřebné přesunu z aktuálních do hořících
-    PresunPodleCasuZAdoB(aktualni_cas, aktualni, horici, 86_400)#změněno na sekundy 
+    PresunPodleCasuZAdoB(aktualni_cas, aktualni, horici, 86400, True)
     #přesun z hořících do past_due 
     PresunPodleCasuZAdoB(aktualni_cas, horici, past_due, 0)
     #vypís úkolů
         #výpis aktuálních úkolů 
     VypisUkoly(aktualni)
         #výpis hořících úkolů 
-    ##print(f"hořící úkoly josu v {horici}")
     VypisUkolyKtereHori(horici)
         #výpis úkolů past due 
     VypisUkolyPastDue(past_due)
+
     typy_atributu_pridavaneho_ukolu = [int,int,str]
+        #při přidání úkolu přidávám intové číslo(data splnění úkolu), intové číslo (počtu opakování) a stringový řetězec (názvu úkolu)
     jmena_atributu_pridavaneho_ukolu = ["datum ve formátu *RRRR.MM.DD.HH.MM* kde \n\tR.. roky (například 2024)|\n\tM.. měsíc (například leden..01)|\n\tD.. datum dne v měsíci (druhý -> 02)|\n\tH.. hodina (formát 24 hodin, 01-24)|\n\tM .. minuta (0 až 60) ","NEPSAT","Jméno úkolu: "]
-    #otázka, jestli chce něco dělat za akce: 
-    #timeout na rozhodnutí 
+
+    #možnost pro uživatele interagovat s programem, ovšem s timeoutem, aby případně program nečekal příliš dlouho na nedostavenou reakci
     print("\nChceš provádět nějaké akce? \nAno ... Napiš cokoliv \nNe ... nereaguj\n")
     pravdivost = ZjistiJestliReaguje(timeout)
-    #ze začátku zjistí jestli něco chce dělat, potom už nekontroluji - předpokládám, že uživatel když chce něco dělat, nepřestane odpovídat
+    #ze začátku zjistí jestli něco chce dělat, potom už nekontroluji - předpokládám, že uživatel když chce něco dělat,a nepřestane odpovídat zničeho nic
     informacni_text = "-----------\nmožnosti, jaké akce můžeš zvolit\n  formát: [jméno akce]......[co napsat pro tíženou akci]\
                 \n\tOdškrtnout(splnit) úkol ...... O, S\n\tPřidat úkol ...... P\n\tZobrazit hotové úkoly ...... Z \n---------\
                 \n\tpro ukončení napiš: cokoliv jiného\n------------"
     text_input = "Napiš mi tíženou akci:\n "
-    ##print(f"{zapoceti} - vstup")
-    ##print(f"\nvstupní parametry:\npravdivost {pravdivost}\nzapoceti {zapoceti}\ncčas zopakovat {cas_zopakovat}\n aktuální {time.time()}, rozdíl je {cas_zopakovat - time.time()}\n")
     if pravdivost:
-        ##zapoceti = input("Napiš mi") #myslím, že nadbytečné, jelikož jsem už zjistil, že chce dělat akci 
-        ##if zapoceti == "A":
-            
             print(informacni_text)
             inp = input()
-            #nastavení timeoutu, ať program nečeká celou dobu na uživatelský input, skončí když mu uživatel nic nedá 
             while inp == "P"  or inp == "S" or inp == "O" or inp == "Z":#jednodušší, než speciální klávesa pro ukončení 
                 if inp == "P":
                     #přidání úkolu 
@@ -147,11 +108,10 @@ while True:
 
                     if v_jakem_souboru == "H":
                         #hořící úkoly 
-                        #zjistit jaký řádek 
                         print()
                         VypisUkoly(horici,True)
                         try:
-                            radka_kterou_odskrtnout_H = input(f"zadej číslo úkolu, který si přeješ odškrtnout ")
+                            radka_kterou_odskrtnout_H = input(f"zadej číslo úkolu, který si přeješ odškrtnout ") #celý řádek je odškrtávaný úkol
                             cislo_odskrtavane_radky_H = int(radka_kterou_odskrtnout_H)
                             if cislo_odskrtavane_radky_H >= 0:
                                 z2 = PresunzAdoB(horici,hotove,cislo_odskrtavane_radky_H)
@@ -172,9 +132,7 @@ while True:
                     if v_jakem_souboru == "A":
                         # aktuální úkoly
                         print()
-                        ##print(f"volám funkci vypisukoly")
                         VypisUkoly(aktualni,True)
-                        ##print(f"zavolal jsem funkci vypisukoly")
                         try:
                             radka_kterou_odskrtnout_A = input(f"zadej číslo úkolu, který si přeješ odškrtnout ")
                             cislo_odskrtavane_radky_A = int(radka_kterou_odskrtnout_A)
@@ -233,9 +191,7 @@ while True:
     print("\tKonec akcí \n")
     print("~"*50)
     time.sleep(doba_ponechani_terminalu)
-    #print(f"budu čekat {cas_zopakovat - time.time()} protože čas je {time.time()} a mám zopakovat v {cas_zopakovat} s intervalem {interval} neboli {interval/60} minut")
     ktery_z_casu_zopakovat = min(cas_zopakovat, cas_opakovani_za_hodinu)
-    #print(f"jdu čekat {ktery_z_casu_zopakovat-time.time()}")
-    time.sleep(max(0, ktery_z_casu_zopakovat - time.time())) #změna, pojistka ať nečekám 
-    print('\x1bc')  #vymaže věci napsané v terminálu 
+    time.sleep(max(0, ktery_z_casu_zopakovat - time.time())) #logika na dobu čekání 
+    #print('\x1bc')  #vymaže věci napsané v terminálu 
     
