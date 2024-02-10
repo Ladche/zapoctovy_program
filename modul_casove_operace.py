@@ -44,8 +44,6 @@ def ZjistiStringNaSekundy(__vstup__t_):
     ##print(f"ve funkci ZJISTIstringnasekundy je sekundový čas {__sekundovy_cas}")
     return __sekundovy_cas
 
-
-
 def ZjistiJePrestupnyRok(rok):
     """vrátí T / F podle toho jestli je daný rok přestupný """
     return (rok % 4 == 0) and ((rok % 100 != 0) or (rok % 400 == 0))
@@ -64,7 +62,6 @@ def ZjistiPocetDnuMezi(datum1, datum2):
     r1,m1,d1,hodina1,minuta1 = datum1
     r2,m2,d2,hodina2,minuta2 = datum2
     return ZjistiCisloDne( d2,m2,r2 )-ZjistiCisloDne( d1,m1,r1 )
-
 
 def ZjistiPocetHodinMezi(datum, datum2):
     """převede data - listy na rozdíl času v minutách """
@@ -104,7 +101,6 @@ def ZjistiTedCasVratiList():
     vraceni_list.append(hodina)
     vraceni_list.append(minuta)
     return  vraceni_list
-
 
 def ZjistiTedCasVratiString():
     "vrátí string ve formátu ROK-MESIC-DEN-HODINA-SEKUNDA"
@@ -205,7 +201,3 @@ def ZjistiJestliReaguje(__doba_cekani_na_uzivatelsky_vstup___):
     """Zadej dobu, jak dlouho má čekat, než uživatel napíše vstup"""
     x = subprocess.call(f'read -t {__doba_cekani_na_uzivatelsky_vstup___}', shell=True)
     return not x
-
-
-
-

@@ -21,7 +21,6 @@ def ZjistiCestuTady():
     "Zjistí a vypíše cestu k aktuální složce, v které je tato funkce spuštěna"
     return os.getcwd()
     
-
 def ZjistiJePritomnySoubor(_soubor):
     """pokud je zadaný soubor v aktuální složce, vypíše True, jinak False """
     for i in os.listdir():

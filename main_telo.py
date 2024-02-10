@@ -58,11 +58,11 @@ timeout = int(ZjistiInterval((30)))#heuristicky si myslím, že 10 sekundový in
 print("Napiš kolik sekund chceš vidět úkoly, co jsi dělal - po ukončení tvojich (případných) akcí. Minimálně je 1s a maximum je hodina")
 doba_ponechani_terminalu = int(ZjistiInterval(3599,1))
 """
-cas_zopakovat = 4
-timeout = 1
-interval = 5 #ODEBRAT "!!!!!" nastaveno na 3 sekundy
+cas_zopakovat = 40
+timeout = 10
+interval = 50 #ODEBRAT "!!!!!" nastaveno na 3 sekundy
 #cekaci_doba_terminalu = 20
-doba_ponechani_terminalu = 3 #max hodina 
+doba_ponechani_terminalu = 30 #max hodisna 
 while True:
     #tady chci kontrolovat hořící úkoly a kdyžtak vypsat výstrahu, že zbývá 1h / 2h / 3h
     """
@@ -101,7 +101,7 @@ while True:
     VypisUkoly(aktualni)
         #výpis hořících úkolů 
     ##print(f"hořící úkoly josu v {horici}")
-    VypisUkoly(horici)
+    VypisUkolyKtereHori(horici)
         #výpis úkolů past due 
     VypisUkolyPastDue(past_due)
     typy_atributu_pridavaneho_ukolu = [int,int,str]
