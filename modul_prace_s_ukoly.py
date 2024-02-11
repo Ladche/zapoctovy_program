@@ -91,7 +91,7 @@ def Atributy(__typy_atributu_na_kontrolu,__nazvy_atributu = ""):
                     return 1
     return __atributy
 
-def Vystraha(_zbyvajici_cas__):
+"""def Vystraha(_zbyvajici_cas__):
     #hlášky na to, když nesplní úkol - mezi 1h, 2h, 3h po datumu splnění 
     list_motiv1 = ["jdi do toho!"] #hodina až dvě po datu splnění
     list_motiv2 = ["Už jsi po termínu, ale nelámej hlavu "] #dvě až tři hodiny 
@@ -121,7 +121,7 @@ def Vystraha(_zbyvajici_cas__):
     if _zbyvajici_cas__ < -86400:
         #86 400 sekund = 24 hodin
         print(f"\tJiž jsi nesplnil tento úkol přes 24 hodin. Zkus se prosím s kvalifikovaným psychologem poradit o chronické prokrastinaci.")
-        return 
+        return """
 
 def VypisUkoly(_soubor_s_aktualnimi_ukoly, __cislovat = False):
     """vypíše úkoly s formátem úkolů //DATUM_OPAKOVANÍ_JMENO-UKOLU// z daného souboru 
@@ -133,14 +133,14 @@ def VypisUkoly(_soubor_s_aktualnimi_ukoly, __cislovat = False):
     if __cislovat == False:
         with open(_soubor_s_aktualnimi_ukoly, 'r') as zdroj:
             for line in zdroj:
-                print(f"Úkol: " + line[15:] + "\tpočet opakování: " + line[13])
+                print(f"Úkol: " + line[15:] )   #počet opakování není nutný #+ "\tpočet opakování: " + line[13])
                 print() #pouze pro vizuální účely     
     if __cislovat == True:
         _cislo_radky = 0
         with open(_soubor_s_aktualnimi_ukoly, 'r') as zdroj:
             for line in zdroj:
                 _cislo_radky += 1 
-                print(f"Úkol číslo {_cislo_radky}: \n\t" + line[15:] + "\tpočet opakování: " + line[13])
+                print(f"Úkol číslo {_cislo_radky}: \n\t" + line[15:] ) # zbytečné dávat počet opakování + "\tpočet opakování: " + line[13])
                 print()
 
 def VypisUkolyPastDue(_soubor_s_post__due_ukoly):
@@ -243,8 +243,8 @@ def VypisHodinoveUkoly(_aktualni_cas,__soubor__s_post_ukoly):
                 __c_termin_ukolu_sekundy = ZjistiStringNaSekundy(__x_termin_ukolu)
                 __x_delta_casu = __c_termin_ukolu_sekundy - _aktualni_cas
                 __nazev_ukolu_ = line[14:]
-                VystrahaPo(__x_delta_casu)
-                VystrahaPred(__x_delta_casu)
+                VystrahaPo(__x_delta_casu,__nazev_ukolu_)
+                VystrahaPred(__x_delta_casu,__nazev_ukolu_)
         ######print(f"zavření {__soubor__s_post_ukoly}")
 def VypisUkolyKtereHori(_soubor_s_horicimi_ukoly):
     #neměním počet upozornění, jelikož zatím ještě zbývá čas na jejich splnění
@@ -253,7 +253,7 @@ def VypisUkolyKtereHori(_soubor_s_horicimi_ukoly):
             if len(line) >12:#vyřešení problému s koncovou řádkou- mezerou na konci souboru
                 VypisRadku(line,False)
 
-def VystrahaPo(_zbyvajici_cas__):
+def VystrahaPo(_zbyvajici_cas__,__nazev_ukolu_po_co_byl):
     """výstraha na úkoly po datu splnění, píše motivující hlášky s úkoly \n\t-1 až 2 hodiny po \n\t-24 až 26 hodin po """
     list_motiv1 = ["Chybí ti splnit úkol. Pusť se do toho, ať nemáš problém.","Nemáš splněný úkol. Ještě to můžeš dohnat a ušetřit si zbytečné starosti a čas.","Nevzdávej to! Překážky nejsou od toho, aby tě zastavily, ale posílily.","Nestresuj se z toho, že jsi úkol nestihl. Zkus se do něj pustit teď. A případně udělat aspoň kousek, který dokážeš nebo stihneš.",\
                    "Nikdy není pozdě, ještě to zkus.","Ještě není pozdě začít a dokončit to, co je potřeba.","Není důležité, kolikrát padneme, ale kolikrát se zvedneme.","Každý úspěch začíná rozhodnutím to zkusit. Dej se ještě do toho.","Netrap se tím, že jsi úkol nestihl a soustřeď se na něj teď."] #hodina až dvě po datu splnění
@@ -262,14 +262,16 @@ def VystrahaPo(_zbyvajici_cas__):
         #výstraha 1 až 2 po 
         index_1 = random.randrange(0,len(list_motiv1))
         print("\t" + list_motiv1[index_1])
-        print(f"\tJe to první připomenutí úkolu, co jsi měl před {int(abs(_zbyvajici_cas__)/60)}min, vrhni se na něj!")
+        print(f"\t!! Připomínám úkol: {__nazev_ukolu_po_co_byl}\n\tco jsi měl před {int(abs(_zbyvajici_cas__)/60)}min, vrhni se na něj!")
+        print()
         return 
     if (-93600 <= _zbyvajici_cas__ <= -86400):
         #86 400 sekund = 24 hodin
-        print(f"\tJiž jsi nesplnil tento úkol přes 24 hodin. Zkus se prosím s kvalifikovaným psychologem poradit o chronické prokrastinaci.")
+        print(f"\t!! Uplynul den po termínu úkolu: {__nazev_ukolu_po_co_byl}\n\tPokud nejsi nemocný nebo úkol nebyl zrušen, zkus si zjistit informace o prokrastinaci a jak na ni vyzrát. Nebo se poraď s kvalifikovaným psychologem. Může ti to pomoct odhalit překážky, které ti brání v tom zažívat úspěch. Je to běžná věc, se kterou se nemusíš trápit a nemusíš být na ni sám.")
+        print()
         return 
 
-def VystrahaPred(_zbyvajici_cas__):
+def VystrahaPred(_zbyvajici_cas__,__nazev__ukolu__pred):
     """vypíše motivující hlášku \n - 2 až 3 hodiny před splněním \n - 48 až 46 hodin před""" 
     list_motiv_pred_2_3 = ["Připomínám nesplněný úkol, pusť se do toho, ať nemáš problém.","Dívej se na celkový cíl a udělej úkol jako krok, který na cestě k němu potřebuješ.",\
                            "Teď je ideální čas ukázat, co dokážeš pod tlakem. Pusť se do toho hned.","Nyní je nejlepší čas začít, každá minuta se počítá, 3, 2, 1… start.",\
@@ -286,14 +288,16 @@ def VystrahaPred(_zbyvajici_cas__):
     if (_zbyvajici_cas__ <= 10800) and (_zbyvajici_cas__ >= 7200): 
         #dvě až tři hodiny před  
         index_2_pred_23 = random.randrange(0,len(list_motiv_pred_2_3))
-        print(f"\tÚkolu zbývá {((_zbyvajici_cas__/60)/60)} hod.")
+        print(f"\t!! Úkolu {__nazev__ukolu__pred} \n\tzbývá {((_zbyvajici_cas__/60)/60)}h do termínu splnění")
         print("\t" + list_motiv_pred_2_3[index_2_pred_23])
+        print()
         return 
 
     if (165600 <= _zbyvajici_cas__ <= 172800): 
         #48 hodin před (až 46)
-        print(f"\tÚkolu zbývá {((_zbyvajici_cas__/60)/60)} hod.")
+        print(f"\t!! Úkolu {__nazev__ukolu__pred}\n\tzbývá {((_zbyvajici_cas__/60)/60)}h do termínu splnění")
         index_2_pred_48 = random.randrange(0,len(list_motiv_pred_48))
         print("\t" + list_motiv_pred_48[index_2_pred_48])
+        print()
         return 
     #####print("KONEC Před")
