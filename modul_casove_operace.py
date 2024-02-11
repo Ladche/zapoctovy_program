@@ -30,8 +30,8 @@ def ZjistiStringNaSekundy(__vstup__t_):
     __den__str_ = __s_cim_delam[6:8]
     __hodina_str_ = __s_cim_delam[8:10]
     __minuta_str_ = __s_cim_delam[10:12]
-    print(f"minuta je {__minuta_str_} z {__s_cim_delam}")
-    print(f"vstup {__s_cim_delam} -> rok{__rok_} . mesic{__mesicek_} den {__den__str_}  hodina {__hodina_str_}  minuta {__minuta_str_}")
+    #####print(f"minuta je {__minuta_str_} z {__s_cim_delam}")
+    #####print(f"vstup {__s_cim_delam} -> rok{__rok_} . mesic{__mesicek_} den {__den__str_}  hodina {__hodina_str_}  minuta {__minuta_str_}")
     #python automaticky oddělá leading zeros při převodu, jinak by šlo použít (0o...)
     ___casik = datetime(int(__rok_),int(__mesicek_),int(__den__str_),int(__hodina_str_),int(__minuta_str_))
     __sekundovy_cas = int(___casik.timestamp())

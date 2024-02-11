@@ -36,12 +36,12 @@ print("Nastavení úspěšné")
 print("-"*50, end = "\n\n")
 #konec nastavení programu 
 
-print("zacatek:")
+
 VypisHodinoveUkoly(time.time(),"aktualni.txt")
 VypisHodinoveUkoly(time.time(),"past_due.txt")
 VypisHodinoveUkoly(time.time(),"horici.txt")
-print("konec ---")
 
+print("--- tu by se to mělo zipakovat")
 
 #hlavní část 
 print("Napiš jak často (v minutách) chceš aby se ti opakovalo vypisování a upozorňování na úkoly")
