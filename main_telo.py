@@ -10,7 +10,6 @@ NPRG030
 
 část programu: kostra programu
 """
-#potřebné moduly
 import time 
 from modul_casove_operace import *
 from modul_prace_s_ukoly import *
@@ -29,7 +28,7 @@ NastavSoubory()
 
 #zjištění přítomnosti potřebných modulů 
 if KontrolaPritomnostiModulu == False:
-    print("CHYBA\n\t!!Zkontrolujte přítomnost potřebných modulů v složce!!")
+    print("CHYBA\n\t!!zkontrolujte přítomnost potřebných modulů v složce!!")
     assert("CHYBA")
 else:
     print("kontrola potřebných modulů proběhla úspěšně ")
@@ -53,17 +52,18 @@ print("Vše proběhlo v pořádku ")
 time.sleep(3) #kvůli možnosti nechat přečíst úkoly, ihned se totiž pak smažou v "print('\x1bc')"
 while True:
     print('\x1bc')  #vymaže věci napsané v terminálu 
+    print(f"nastaveno na: doba mezi upozorněními: {interval}min, doba na reakci uživatele: {timeout}s")
     aktualni_cas = time.time()
-    
     if (ZjistiJestliJeCelaHodina() == True):
         #každou hodinu připomenutí úkolů, které již měly být splněné 
         VypisHodinoveUkoly(aktualni_cas,past_due) #po 
         VypisHodinoveUkoly(aktualni_cas,horici)# 2 až 3 hodiny před
-        VypisHodinoveUkoly(aktualni_cas,aktualni_cas) #2 dny před 
-        time.sleep(cas_zopakovat-aktualni_cas)
+        VypisHodinoveUkoly(aktualni_cas,aktualni) #2 dny před 
         print("x"*50)
+        cas_opakovani_za_hodinu_sekundy_x_ = ZjistiSekundyDoDalsiHodiny()
+        kolik_sekund_pockat_x_ = min((cas_zopakovat-time.time()), cas_opakovani_za_hodinu_sekundy_x_)
+        time.sleep(kolik_sekund_pockat_x_)
         continue
-    cas_opakovani_za_hodinu = aktualni_cas + 3600
     aktualni_cas = time.time() #aktualizace času, předchozí blok může trvat určitou i když velmi krátkou dobu - lze případně tento řádek zanedbat
     cas_zopakovat = aktualni_cas + interval #vypočítání času nového spuštění
 
@@ -81,7 +81,7 @@ while True:
 
     typy_atributu_pridavaneho_ukolu = [int,int,str]
         #při přidání úkolu přidávám intové číslo(data splnění úkolu), intové číslo (počtu opakování) a stringový řetězec (názvu úkolu)
-    jmena_atributu_pridavaneho_ukolu = ["datum ve formátu *RRRR.MM.DD.HH.MM* kde \n\tR.. roky (například 2024)|\n\tM.. měsíc (například leden..01)|\n\tD.. datum dne v měsíci (druhý -> 02)|\n\tH.. hodina (formát 24 hodin, 00-23)|\n\tM .. minuta (0 až 59) ","NEPSAT","Jméno úkolu: "]
+    jmena_atributu_pridavaneho_ukolu = ["datum ve formátu *RRRR.MM.DD.HH.MM* kde \n\tR.. roky (například 2024)|\n\tM.. měsíc (například leden..01)|\n\tD.. datum dne v měsíci (druhý -> 02)|\n\tH.. hodina (formát 24 hodin, 01-24)|\n\tM .. minuta (0 až 60) ","NEPSAT","Jméno úkolu: "]
 
     #možnost pro uživatele interagovat s programem, ovšem s timeoutem, aby případně program nečekal příliš dlouho na nedostavenou reakci
     print("\nChceš provádět nějaké akce? \nAno ... Napiš cokoliv \nNe ... nereaguj\n")
@@ -199,6 +199,8 @@ while True:
     pravdivost = False
     print("\tKonec akcí \n")
     print("="*50)
-    ktery_z_casu_zopakovat = min(cas_zopakovat, cas_opakovani_za_hodinu)
-    ##print(f"zopakuju za {ktery_z_casu_zopakovat - time.time()} s -> {(ktery_z_casu_zopakovat - time.time())/60} min  jelikož je to minimum z \ncas_zop{cas_zopakovat-time.time()} \tza hoidnu{cas_opakovani_za_hodinu-time.time()}")
-    time.sleep(max(0, ktery_z_casu_zopakovat - time.time())) #změna - nahrazení místo subprocesu hlídajícího čas 
+    cas_opakovani_za_hodinu_sekundy = ZjistiSekundyDoDalsiHodiny()
+    kolik_sekund_pockat = min((cas_zopakovat-time.time()), cas_opakovani_za_hodinu_sekundy)
+    print(f"další opakování proběhne za {kolik_sekund_pockat}s")
+    #print(f"zopakuju za {kolik_sekund_pockat} s -> {kolik_sekund_pockat/60} min  jelikož je to minimum z \ncasu kdy by se ukazal uzivateli{(cas_zopakovat-time.time())/60}min \tza hodinu{cas_opakovani_za_hodinu_sekundy/60}min")
+    time.sleep(max(0, kolik_sekund_pockat)) #změna - nahrazení místo subprocesu hlídajícího čas 

@@ -11,13 +11,19 @@ NPRG030
 část programu: potřebný modul časových operací 
 """
 #potřebné moduly
-from datetime import datetime
+from datetime import datetime,timedelta
 import subprocess
+
+def ZjistiSekundyDoDalsiHodiny():
+    """vrátí počet sekund do nejbližší hodiny"""
+    _aktualni_cas = datetime.now()
+    __dalsi_hodina = _aktualni_cas.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
+    return (__dalsi_hodina - _aktualni_cas).seconds
 
 def ZjistiJestliJeCelaHodina():
     """pokud je v daný moment celá hodina, vrátí True"""
     _akt_zk_casik = datetime.now()
-    return _akt_zk_casik.minute == 00 and _akt_zk_casik.second == 00
+    return _akt_zk_casik.minute == 00 ##and _akt_zk_casik.second == 00 #můžu si dovolit díky limitu intervalu minimálně 1 minuty 
 
 def ZjistiStringNaSekundy(__vstup__t_):
     """vrátí počet sekund spočítaný ze stringového vstupu """

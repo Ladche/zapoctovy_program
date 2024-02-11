@@ -202,7 +202,6 @@ def VypisHodinoveUkoly(_aktualni_cas,__soubor__s_post_ukoly):
     """ z souboru vypíšu úkoly, které mají po  splnění """
     #nechci měnit počet upozornění, jen na ně upozornit
     with open(__soubor__s_post_ukoly, 'r') as zdroj:
-        
         zdroj__ = zdroj.readlines()
         for line in zdroj__: 
             if len(line) >10:#vyřešení problému s koncovou řádkou- mezerou na konci souboru
