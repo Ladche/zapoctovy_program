@@ -15,7 +15,7 @@ from modul_casove_operace import *
 from modul_prace_s_ukoly import *
 from modul_pritomnost_souboru import *
 
-motivujici_hlasky = ["Skvělá práce! Máš hotový další úkol!"]
+motivujici_hlasky = ["Skvělá práce! Máš hotový další úkol!","Moc blahopřeji, že jsi to zvládl.","Super! Zasloužíš si něco, co ti udělá radost.","Dobrá práce.", "Úžasné! Zase jsi o kousek blíž k cíli.","Wow, dobře ty.","Blahopřeji. S kázní přichází svoboda.","Paráda! Malé kroky vedou k velkému úspěchu.","Vedeš si dobře!"]
 #motivující hlášky zobrazené při splnění úkolu
 
 #nastavení programu - vytvoření potřebných souborů, pokud již nejsou přítomny v aktuální složce 
@@ -36,13 +36,20 @@ print("Nastavení úspěšné")
 print("-"*50, end = "\n\n")
 #konec nastavení programu 
 
+print("zacatek:")
+VypisHodinoveUkoly(time.time(),"aktualni.txt")
+VypisHodinoveUkoly(time.time(),"past_due.txt")
+VypisHodinoveUkoly(time.time(),"horici.txt")
+print("konec ---")
+
+
 #hlavní část 
 print("Napiš jak často (v minutách) chceš aby se ti opakovalo vypisování a upozorňování na úkoly")
-interval = int(ZjistiInterval(1439)) *60 #necelých 24 hodin mi přijde jako smysluplná horní mez vzhledem k cíli programu
+interval = (int(ZjistiInterval(1439,0.9)) *60) #necelých 24 hodin mi přijde jako smysluplná horní mez vzhledem k cíli programu
 print("Napiš jak kolik času v sekundách chceš, aby program čekal na tvoji odpověď")
 timeout = int(ZjistiInterval((60))) #horní hranice minuty pro zadání vstupu mi přijde dostačující
 print("Napiš kolik sekund chceš vidět úkoly, co jsi dělal - po ukončení tvojich (případných) akcí. Minimálně je 1s a maximum je hodina")
-doba_ponechani_terminalu = int(ZjistiInterval(interval,1)) #nemá smysl nechávat terminál déle než je interval mezi připomínáními
+doba_ponechani_terminalu = int((ZjistiInterval(int(interval*60),0.9)))#nemá smysl nechávat terminál déle než je interval mezi připomínáními
 
 cas_zopakovat = 0 #prvotní nastavení pro hodinové kontroly
 while True:
@@ -50,7 +57,9 @@ while True:
     cas_opakovani_za_hodinu = aktualni_cas + 3600
     if (ZjistiJestliJeCelaHodina() == True) and (cas_opakovani_za_hodinu < cas_zopakovat):
         #každou hodinu připomenutí úkolů, které již měly být splněné 
-        VypisHodinoveUkoly(aktualni_cas,past_due)
+        VypisHodinoveUkoly(aktualni_cas,past_due) #po 
+        VypisHodinoveUkoly(aktualni_cas,horici)# 2 až 3 hodiny před
+        VypisHodinoveUkoly(aktualni_cas,aktualni_cas) #2 dny před 
         time.sleep(cas_zopakovat-aktualni_cas)
         print("x"*50)
         continue
@@ -192,6 +201,6 @@ while True:
     print("~"*50)
     time.sleep(doba_ponechani_terminalu)
     ktery_z_casu_zopakovat = min(cas_zopakovat, cas_opakovani_za_hodinu)
-    time.sleep(max(0, ktery_z_casu_zopakovat - time.time())) #logika na dobu čekání 
+    time.sleep(max(0, ktery_z_casu_zopakovat - time.time())) #změna, pojistka ať nečekám 
     #print('\x1bc')  #vymaže věci napsané v terminálu 
     
