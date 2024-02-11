@@ -10,6 +10,7 @@ NPRG030
 
 část programu: modul kontroly přítomnosti soouborů 
 """
+#potřebné moduly
 import os
 
 def ZjistiCestuTady():

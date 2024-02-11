@@ -36,26 +36,25 @@ print("Nastavení úspěšné")
 print("-"*50, end = "\n\n")
 #konec nastavení programu 
 
-
+#dodatečné upozornění na začátku programu
 VypisHodinoveUkoly(time.time(),"aktualni.txt")
 VypisHodinoveUkoly(time.time(),"past_due.txt")
 VypisHodinoveUkoly(time.time(),"horici.txt")
 
-print("--- tu by se to mělo zipakovat")
 
 #hlavní část 
 print("Napiš jak často (v minutách) chceš aby se ti opakovalo vypisování a upozorňování na úkoly")
 interval = (int(ZjistiInterval(1439,0.9)) *60) #necelých 24 hodin mi přijde jako smysluplná horní mez vzhledem k cíli programu
 print("Napiš jak kolik času v sekundách chceš, aby program čekal na tvoji odpověď")
 timeout = int(ZjistiInterval((60))) #horní hranice minuty pro zadání vstupu mi přijde dostačující
-print("Napiš kolik sekund chceš vidět úkoly, co jsi dělal - po ukončení tvojich (případných) akcí. Minimálně je 1s a maximum je hodina")
-doba_ponechani_terminalu = int((ZjistiInterval(int(interval*60),0.9)))#nemá smysl nechávat terminál déle než je interval mezi připomínáními
-
 cas_zopakovat = 0 #prvotní nastavení pro hodinové kontroly
+print("Vše proběhlo v pořádku ")
+time.sleep(3) #kvůli možnosti nechat přečíst úkoly, ihned se totiž pak smažou v "print('\x1bc')"
 while True:
+    print('\x1bc')  #vymaže věci napsané v terminálu 
     aktualni_cas = time.time()
-    cas_opakovani_za_hodinu = aktualni_cas + 3600
-    if (ZjistiJestliJeCelaHodina() == True) and (cas_opakovani_za_hodinu < cas_zopakovat):
+    
+    if (ZjistiJestliJeCelaHodina() == True):
         #každou hodinu připomenutí úkolů, které již měly být splněné 
         VypisHodinoveUkoly(aktualni_cas,past_due) #po 
         VypisHodinoveUkoly(aktualni_cas,horici)# 2 až 3 hodiny před
@@ -63,7 +62,7 @@ while True:
         time.sleep(cas_zopakovat-aktualni_cas)
         print("x"*50)
         continue
-
+    cas_opakovani_za_hodinu = aktualni_cas + 3600
     aktualni_cas = time.time() #aktualizace času, předchozí blok může trvat určitou i když velmi krátkou dobu - lze případně tento řádek zanedbat
     cas_zopakovat = aktualni_cas + interval #vypočítání času nového spuštění
 
@@ -71,7 +70,7 @@ while True:
     PresunPodleCasuZAdoB(aktualni_cas, aktualni, horici, 86400, True)
     #přesun z hořících do past_due 
     PresunPodleCasuZAdoB(aktualni_cas, horici, past_due, 0)
-    #vypís úkolů
+    
         #výpis aktuálních úkolů 
     VypisUkoly(aktualni)
         #výpis hořících úkolů 
@@ -120,7 +119,7 @@ while True:
                         print()
                         VypisUkoly(horici,True)
                         try:
-                            radka_kterou_odskrtnout_H = input(f"zadej číslo úkolu, který si přeješ odškrtnout ") #celý řádek je odškrtávaný úkol
+                            radka_kterou_odskrtnout_H = input(f"zadej číslo úkolu, který si přeješ odškrtnout: (pokud nechceš odškrtnout tak zadej text)") #celý řádek je odškrtávaný úkol
                             cislo_odskrtavane_radky_H = int(radka_kterou_odskrtnout_H)
                             if cislo_odskrtavane_radky_H >= 0:
                                 z2 = PresunzAdoB(horici,hotove,cislo_odskrtavane_radky_H)
@@ -193,14 +192,12 @@ while True:
                     #výpis jen hotových, protože aktuální, hořící a past due se mu automaticky zobrazí, tudíž nemá smysl je vypisovat 
                     print("Hotové úkoly:")
                     z7 = VypisUkoly(hotove) 
-                    print("%%%%%%")
+                    print("%"*40)
                     print("\n\n"+ informacni_text)
                     inp = input(text_input)
     pravdivost = False
     print("\tKonec akcí \n")
-    print("~"*50)
-    time.sleep(doba_ponechani_terminalu)
+    print("="*50)
     ktery_z_casu_zopakovat = min(cas_zopakovat, cas_opakovani_za_hodinu)
-    time.sleep(max(0, ktery_z_casu_zopakovat - time.time())) #změna, pojistka ať nečekám 
-    #print('\x1bc')  #vymaže věci napsané v terminálu 
-    
+    ##print(f"zopakuju za {ktery_z_casu_zopakovat - time.time()} s -> {(ktery_z_casu_zopakovat - time.time())/60} min  jelikož je to minimum z \ncas_zop{cas_zopakovat-time.time()} \tza hoidnu{cas_opakovani_za_hodinu-time.time()}")
+    time.sleep(max(0, ktery_z_casu_zopakovat - time.time())) #změna - nahrazení místo subprocesu hlídajícího čas 
