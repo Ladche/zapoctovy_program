@@ -27,7 +27,7 @@ def ZjistiStringNaSekundy(__vstup__t_):
     __den__str_ = __s_cim_delam[6:8]
     __hodina_str_ = __s_cim_delam[8:10]
     __minuta_str_ = __s_cim_delam[10:12]
-    #python automaticky oddělá leading zeros při převodu, jinak by šlo použít (0o...)
+    #python automaticky oddělá leading zeros při převodu z stringu na int, jinak by šlo použít (0o...)
     ___casik = datetime(int(__rok_),int(__mesicek_),int(__den__str_),int(__hodina_str_),int(__minuta_str_))
     __sekundovy_cas = int(___casik.timestamp())
     return __sekundovy_cas
@@ -38,17 +38,16 @@ def ZjistiInterval(maximum = 1440, minimum = 0):
         lze si nastavit vlastní hodnoty
     """
     inter = input("Zadej interval: ")
-    podminka = True
-    while podminka:
+    while True:
         try:
-            #pokud zadá string místo čísla, spadne
+            #pokud zadán stringový řetězec místo číselné hodnoty, spadne
             if int(inter)<=  maximum:
                 if int(inter) > minimum:
                     return inter
             print(f"Tvůj interval nedává s danými požadavky smysl. Vyber si nějaký v rozmezí {minimum} <-> {maximum}\nZvol si nějaký, který bude smysluplný:")
             inter = input()
         except:
-            #pokud nezadal int
+            #pokud nezadal číselnou hodnotu
             print("Tvůj vstup je špatně zadaný, zadej znovu smysluplnější:")
             inter = input()  
 

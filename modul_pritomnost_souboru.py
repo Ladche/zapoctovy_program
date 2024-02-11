@@ -8,7 +8,7 @@ ZS 2023/2024
 Programování I 
 NPRG030
 
-část programu: modul kontroly přítomnosti soouborů 
+část programu: modul kontroly přítomnosti souborů 
 """
 #potřebné moduly
 import os
@@ -32,7 +32,7 @@ def NastavSoubory():
         - soubor s post_due úkoly: post_due.txt 
         """
     print("-   "*20)
-    print("začátek úseku nastavování souborů ")
+    print("Začátek úseku nastavování souborů ")
     aktualni = "aktualni.txt"
     horici = "horici.txt"
     past_due = "past_due.txt"
@@ -48,7 +48,7 @@ def NastavSoubory():
                 with open(cesta_k_akt, "r") as f:
                     s = f.readline
         except:
-            print(" \tsoubor s aktuálními úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
+            print("\tsoubor s aktuálními úkoly nebyl přítomný, zahajuji jeho tvorbu ")
             try:
                 cesta_k_akt = ZjistiCestuTady() + "/" + aktualni                
                 open(cesta_k_akt, "x")
@@ -65,7 +65,7 @@ def NastavSoubory():
                 with open(cesta_k_akt, "r") as f:
                     s = f.readline
         except:
-            print(" \tsoubor s hořícími úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
+            print("\tsoubor s hořícími úkoly nebyl přítomný, zahajuji jeho tvorbu ")
             try:
                 cesta_k_akt = ZjistiCestuTady() + "/" + horici
                 open(cesta_k_akt, "x")
@@ -81,7 +81,7 @@ def NastavSoubory():
                 with open(cesta_k_akt, "r") as f:
                     s = f.readline
         except:
-            print(" \tsoubor s post due úkoly nebyl přítomný, zahajuji  jeho tvorbu ")
+            print("\tsoubor s post due úkoly nebyl přítomný, zahajuji jeho tvorbu ")
             try:
                 cesta_k_akt = ZjistiCestuTady() + "/" + past_due
                 open(cesta_k_akt, "x")
@@ -105,7 +105,7 @@ def NastavSoubory():
             except:
                 print("CHYBA - zkuste restartovat soubor")
                 #vyjímka, chyba, potřeba restartovat 
-    print("\nkonec úseku nastavování potřebných souborů ")
+    print("\nKonec úseku nastavování potřebných souborů ")
     print("-   "*20)
 
 def KontrolaPritomnostiModulu():
@@ -121,7 +121,7 @@ def KontrolaPritomnostiModulu():
             with open(cesta_k_akt, "r") as f:
                 s = f.readline 
     except:
-        print(f" modul {modul_a} není přítomný")
+        print(f" Modul {modul_a} není přítomný !!")
         return False 
     try:
         if ZjistiJePritomnySoubor(modul_b) == True:
@@ -131,7 +131,7 @@ def KontrolaPritomnostiModulu():
             with open(cesta_k_akt, "r") as f:
                 s = f.readline
     except:
-        print(f" modul {modul_b} není přítomný")
+        print(f" Modul {modul_b} není přítomný !!")
         return False
     try:
         if ZjistiJePritomnySoubor(modul_c) == True:
@@ -142,5 +142,5 @@ def KontrolaPritomnostiModulu():
                 s = f.readline
                 return True #všechny moduly jsou přítomny 
     except:
-        print(f" modul {modul_c} není přítomný")
+        print(f" Modul {modul_c} není přítomný !!")
         return False

@@ -10,6 +10,7 @@ NPRG030
 
 část programu: kostra programu
 """
+#potřebné moduly
 import time 
 from modul_casove_operace import *
 from modul_prace_s_ukoly import *
@@ -28,7 +29,7 @@ NastavSoubory()
 
 #zjištění přítomnosti potřebných modulů 
 if KontrolaPritomnostiModulu == False:
-    print("CHYBA\n\t!!zkontrolujte přítomnost potřebných modulů v složce!!")
+    print("CHYBA\n\t!!Zkontrolujte přítomnost potřebných modulů v složce!!")
     assert("CHYBA")
 else:
     print("kontrola potřebných modulů proběhla úspěšně ")
@@ -80,7 +81,7 @@ while True:
 
     typy_atributu_pridavaneho_ukolu = [int,int,str]
         #při přidání úkolu přidávám intové číslo(data splnění úkolu), intové číslo (počtu opakování) a stringový řetězec (názvu úkolu)
-    jmena_atributu_pridavaneho_ukolu = ["datum ve formátu *RRRR.MM.DD.HH.MM* kde \n\tR.. roky (například 2024)|\n\tM.. měsíc (například leden..01)|\n\tD.. datum dne v měsíci (druhý -> 02)|\n\tH.. hodina (formát 24 hodin, 01-24)|\n\tM .. minuta (0 až 60) ","NEPSAT","Jméno úkolu: "]
+    jmena_atributu_pridavaneho_ukolu = ["datum ve formátu *RRRR.MM.DD.HH.MM* kde \n\tR.. roky (například 2024)|\n\tM.. měsíc (například leden..01)|\n\tD.. datum dne v měsíci (druhý -> 02)|\n\tH.. hodina (formát 24 hodin, 00-23)|\n\tM .. minuta (0 až 59) ","NEPSAT","Jméno úkolu: "]
 
     #možnost pro uživatele interagovat s programem, ovšem s timeoutem, aby případně program nečekal příliš dlouho na nedostavenou reakci
     print("\nChceš provádět nějaké akce? \nAno ... Napiš cokoliv \nNe ... nereaguj\n")

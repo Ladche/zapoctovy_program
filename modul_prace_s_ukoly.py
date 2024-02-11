@@ -26,10 +26,10 @@ def PresunzAdoB(_soubor_odkud, _soubor_kam,_ktery_radek):
                 #najití měněné řádky 
                 meneny_radek += line
             else:
-                obsah_s_odkud += line #+ "\n"
+                obsah_s_odkud += line 
                 #ostatní neměnené řádky přidávám do proměnné reprezentující soubor s odstraněnou příslušnou řádkou
     with open(_soubor_odkud, 'w') as soubor1: #soubor odkud vezmu
-        soubor1.write(str(obsah_s_odkud) )#+ "\n")
+        soubor1.write(str(obsah_s_odkud) )
     with open(_soubor_kam, 'a') as soubor2:#soubor kam dopisu
         soubor2.write(str(meneny_radek))
 def PridejUkol(_typy_atributu_co_maji_byt, _soubor,_jmena_atributu = None):
@@ -45,7 +45,7 @@ def PridejUkol(_typy_atributu_co_maji_byt, _soubor,_jmena_atributu = None):
         """
     pridavane_atributy = Atributy(_typy_atributu_co_maji_byt,_jmena_atributu)
     if pridavane_atributy == 1:
-        print("špatně přidané parametry, zkus to znova :D")
+        print("Špatně přidané parametry, zkus to znova :D")
         return 1
     with open(_soubor, 'a') as s:
         #takto automaticky zavře soubor jak se dodělá blok kódu, takže jej nemusím netřeba zavírat metodou close() 
@@ -60,14 +60,14 @@ def Atributy(__typy_atributu_na_kontrolu,__nazvy_atributu = ""):
     """vratí daný počet parametrů, kolik je položek v __typy_atributu_na_kontrolu od uživatele daných typů. Uživatele se zeptá na příslušný atribut s názvem atributu 
     (položky v __nazvy_atributu), který i zkontroluje. Pokud dostane v názvu atributu "NEPSAT", tak se nevyžaduje vstup od uživatele a automaticky přidá 0"""
     pocet = len(__typy_atributu_na_kontrolu)
-    print(f"zadej mi následujících {pocet-1} atributů na každý řádek zvlášť: ")  
+    print(f"Zadej mi následujících {pocet-1} atributů na každý řádek zvlášť: ")  
     __atributy = []
     for i in range(pocet):
         if __nazvy_atributu[i] == "NEPSAT":
             __atributy.append(0)
             #pokud je zadané slovo "NEPSAT", program se neptá uživatele na input a pokračuje na další(jestli je ještě další atribut)
         else:
-            print(f"zadej mi {__nazvy_atributu[i]}\n\n... typu {__typy_atributu_na_kontrolu[i]}: \n")
+            print(f"Zadej mi {__nazvy_atributu[i]}\n\n... typu {__typy_atributu_na_kontrolu[i]}: \n")
             if __typy_atributu_na_kontrolu[i] == int:
                 __input_uziv = input()
                 try:
@@ -78,10 +78,10 @@ def Atributy(__typy_atributu_na_kontrolu,__nazvy_atributu = ""):
                         __atributy.append(a)
                     else:
                         #nebyla zadána potřebná délka data
-                        print(f"chyba, zkus znovu. Atribut měl být {__typy_atributu_na_kontrolu[i]} a dal jsi {type(__input_uziv)} s délky 12")
+                        print(f"Chyba, zkus znovu. Atribut měl být {__typy_atributu_na_kontrolu[i]} a dal jsi {type(__input_uziv)}")
                         return 1
                 except:
-                    print(f"chyba, zkus znovu. Atribut měl být {__typy_atributu_na_kontrolu[i]} a dal jsi {type(__input_uziv)}")
+                    print(f"Chyba, zkus znovu. Atribut měl být {__typy_atributu_na_kontrolu[i]} a dal jsi {type(__input_uziv)}")
                     return 1
             if __typy_atributu_na_kontrolu[i] == str:
                 try:
@@ -89,7 +89,7 @@ def Atributy(__typy_atributu_na_kontrolu,__nazvy_atributu = ""):
                     a = str(input_uziv)
                     __atributy.append(a)
                 except:
-                    print(f"chyba - špatně zadaný typ, zkus znovu: Atribut měl být {__typy_atributu_na_kontrolu[i]} a dal jsi {type(input_uziv)}")
+                    print(f"Chyba - špatně zadaný typ, zkus znovu: Atribut měl být {__typy_atributu_na_kontrolu[i]} a dal jsi {type(input_uziv)}")
                     return 1
     return __atributy
 
