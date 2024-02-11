@@ -90,7 +90,7 @@ while True:
     informacni_text = "-----------\nmožnosti, jaké akce můžeš zvolit\n  formát: [jméno akce]......[co napsat pro tíženou akci]\
                 \n\tOdškrtnout(splnit) úkol ...... O, S\n\tPřidat úkol ...... P\n\tZobrazit hotové úkoly ...... Z \n---------\
                 \n\tpro ukončení napiš: cokoliv jiného\n------------"
-    text_input = "Napiš mi tíženou akci:\n "
+    text_input = "Napiš mi požadovanou akci:\n "
     if pravdivost:
             print(informacni_text)
             inp = input()
@@ -201,6 +201,6 @@ while True:
     print("="*50)
     cas_opakovani_za_hodinu_sekundy = ZjistiSekundyDoDalsiHodiny()
     kolik_sekund_pockat = min((cas_zopakovat-time.time()), cas_opakovani_za_hodinu_sekundy)
-    print(f"další opakování proběhne za {kolik_sekund_pockat}s")
+    print(f"další opakování proběhne za {kolik_sekund_pockat}s od {datetime.now()}")
     #print(f"zopakuju za {kolik_sekund_pockat} s -> {kolik_sekund_pockat/60} min  jelikož je to minimum z \ncasu kdy by se ukazal uzivateli{(cas_zopakovat-time.time())/60}min \tza hodinu{cas_opakovani_za_hodinu_sekundy/60}min")
     time.sleep(max(0, kolik_sekund_pockat)) #změna - nahrazení místo subprocesu hlídajícího čas 
