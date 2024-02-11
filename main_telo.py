@@ -27,9 +27,9 @@ print("Nastavuji program:")
 NastavSoubory()
 
 #zjištění přítomnosti potřebných modulů 
-if KontrolaPritomnostiModulu == False:
-    print("CHYBA\n\t!!zkontrolujte přítomnost potřebných modulů v složce!!")
-    assert("CHYBA")
+if KontrolaPritomnostiModulu() == False:
+    print("CHYBA\n\t!!zkontrolujte přítomnost potřebných modulů!!")
+    assert KontrolaPritomnostiModulu() == True, f"chyba, chybí modul(y)"
 else:
     print("kontrola potřebných modulů proběhla úspěšně ")
 print("Nastavení úspěšné")
