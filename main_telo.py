@@ -26,7 +26,7 @@ hotove = "hotove.txt"
 print("Nastavuji program:")
 NastavSoubory()
 
-#zjištění přítomnosti potřebných modulů 
+#zjištění přítomnosti potřebných modulů
 if KontrolaPritomnostiModulu() == False:
     print("CHYBA\n\t!!zkontrolujte přítomnost potřebných modulů v složce!!")
     assert KontrolaPritomnostiModulu() == False, f"chyba, chybí modul(y)"
@@ -44,7 +44,7 @@ VypisHodinoveUkoly(time.time(),"horici.txt")
 
 #hlavní část 
 print("Napiš jak často (v minutách) chceš aby se ti opakovalo vypisování a upozorňování na úkoly")
-interval = (int(ZjistiInterval(1439,0.9)) *60) #necelých 24 hodin mi přijde jako smysluplná horní mez vzhledem k cíli programu
+interval = (int(ZjistiInterval()) *60) 
 print("Napiš jak kolik času v sekundách chceš, aby program čekal na tvoji odpověď")
 timeout = int(ZjistiInterval((60))) #horní hranice minuty pro zadání vstupu mi přijde dostačující
 cas_zopakovat = 0 #prvotní nastavení pro hodinové kontroly

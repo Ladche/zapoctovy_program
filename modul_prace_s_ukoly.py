@@ -75,7 +75,12 @@ def Atributy(__typy_atributu_na_kontrolu,__nazvy_atributu = ""):
                         #předem vím, že v programu budu načítat pouze data splnění od uživatele jako intová čísla, a vím předem počet cifer - 12 (RRRRMMDDHHMM)
                         a = int(__input_uziv)
                         #pokud by nebylo zadáno číslo, try blok spadne a program přejde do except bloku
-                        __atributy.append(a)
+                        #základní kontrola dat 
+                        if (1<=(int(__input_uziv[4:6])) <=12) and (1 <=(int(__input_uziv[6:8]))<=31) and (0 <=(int(__input_uziv[8:10]))<24) and (0 <=(int(__input_uziv[6:8]))<60):
+                            __atributy.append(a)
+                        else:
+                            print("Špatně jsi zadal datum a čas. Zkus znovu.")
+                            return 1
                     else:
                         #nebyla zadána potřebná délka data
                         print(f"Chyba, zkus znovu. Atribut měl být {__typy_atributu_na_kontrolu[i]} a dal jsi {type(__input_uziv)}")
@@ -94,7 +99,7 @@ def Atributy(__typy_atributu_na_kontrolu,__nazvy_atributu = ""):
     return __atributy
 
 def VypisUkoly(_soubor_s_aktualnimi_ukoly, __cislovat = False):
-    """vypíše (číslovatelné) názvy úkolů z daného souboru 
+    """vypíše (volitelně číslovatelné) názvy úkolů z daného souboru 
     tedy klidně už hotové úkoly, nehotové úkoly,... 
     každý úkol na novou řádku
     \t lze číslovat -> __cislovat = "True" 
@@ -199,7 +204,7 @@ def PresunPodleCasuZAdoB(_cas, _souborA, _souborB, _Kolik_ma_zbyt,__omezeno_nulo
                     _aktualni_r += 1  
 
 def VypisHodinoveUkoly(_aktualni_cas,__soubor__s_post_ukoly):
-    """ z souboru vypíšu úkoly, které mají po  splnění """
+    """ z souboru vypíšu úkoly, které mají do a po splnění """
     #nechci měnit počet upozornění, jen na ně upozornit
     with open(__soubor__s_post_ukoly, 'r') as zdroj:
         zdroj__ = zdroj.readlines()

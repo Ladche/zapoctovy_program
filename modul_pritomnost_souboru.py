@@ -20,7 +20,7 @@ def ZjistiCestuTady():
 def ZjistiJePritomnySoubor(_soubor):
     """pokud je zadaný soubor v aktuální složce, vypíše True, jinak False """
     for i in os.listdir():
-        if i == _soubor:
+        if _soubor == i:
             return True 
     return False
 
@@ -115,6 +115,7 @@ def KontrolaPritomnostiModulu():
     modul_c =  "modul_pritomnost_souboru.py"
     try:
         if ZjistiJePritomnySoubor(modul_a) == True:
+            print("přítomný modul: modul_casove_operace")
             pass
         else:
             cesta_k_akt = ZjistiCestuTady() + "/" + modul_a
@@ -125,6 +126,7 @@ def KontrolaPritomnostiModulu():
         return False 
     try:
         if ZjistiJePritomnySoubor(modul_b) == True:
+            print("přítomný modul: modul_prace_s_ukoly")
             pass
         else:
             cesta_k_akt = ZjistiCestuTady() + "/" + modul_b
@@ -135,6 +137,7 @@ def KontrolaPritomnostiModulu():
         return False
     try:
         if ZjistiJePritomnySoubor(modul_c) == True:
+            print("přítomný modul: modul_pritomnost_souboru")
             pass
         else:
             cesta_k_akt = ZjistiCestuTady() + "/" + modul_c
